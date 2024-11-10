@@ -1,0 +1,36 @@
+import React, { useState } from 'react';
+import logo from '../assets/KawrgoJumperShippingLogisticsLogo.png';
+import '../styles/Home.css';
+import { useNavigate } from 'react-router-dom';
+
+function Home() {
+	const [username, setUsername] = useState('');
+	const navigate = useNavigate();
+
+	const handleLogin = () => {
+		if (username) {
+			navigate('/upload-manifest');
+		}
+		else {
+			alert('Please enter username.');
+		}
+	};
+
+	return (
+		<div className="home-container">
+			<img src = {logo} alt = "KawrgoJumper Logo" className='home-logo'></img>
+			{/* <h1>Welcome to KawrgoJumper</h1> */}
+			<input
+				type = "text"
+				placeholder="Username"
+				value ={username}
+				onChange={(e) => setUsername(e.target.value)}
+				className='home-input'/>
+			<button onClick={handleLogin} className='home-login-button'>
+				Login
+			</button>
+		</div>
+	);
+}
+
+export default Home;
