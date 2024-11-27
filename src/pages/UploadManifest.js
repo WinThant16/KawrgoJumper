@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar.js';
 import '../styles/UploadManifest.css';
@@ -9,6 +9,17 @@ function UploadManifest() {
 	const [file, setFile] = useState(null);				  //state to store actual file object
 	const navigate = useNavigate();						  // state with navigation hook for moving to next page
 
+	/*
+	* Load progress from local storage when component is mounted.
+	*/
+	useEffect(() => {
+		const savedFileName = localStorage.getItem('manifestFile'); // Get saved file name
+		if (savedFileName) {
+			setFileName(savedFileName); // Restore the saved file name
+			setFile({ name: savedFileName }); // Simulate a file object
+		}
+	}, []);
+
 	/* 	this handles file input change event.
 	   	triggered when a user selects file, 
 	   	this updates the state with the selected file */
@@ -16,7 +27,9 @@ function UploadManifest() {
 		const selectedFile = e.target.files[0];			//get selected file
 		if (selectedFile) {
 			setFileName(selectedFile.name);					//update state with selected file
+			setFile(selectedFile);							//store selected file object
 			localStorage.setItem('manifestFile', selectedFile.name);	//save file name in local storage
+			localStorage.setItem('currentPage', 'upload-manifest');		//save current page in local storage
 		}
 	};
 	/* 	this handles form submission.
@@ -25,29 +38,25 @@ function UploadManifest() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (file) {
-			alert(`Manifest file "${file.name}" uploaded successfully!`)
+			// alert(`Manifest file "${file.name}" uploaded successfully!`)			//to debug, commented out now.
 			console.log('File uploaded:', file.name); //log uploaded name to debug
+			localStorage.setItem('currentPage', 'task-selection');		//update the current page
 			navigate('/task-selection');              //navigate to next page
 		} else {
 			alert ('Please upload a manifest file.'); //show alert if no file is selected.
 		}
 	}
 
-	// ######TO DO################ PLACEHOLDER FOR LOG SUBMISSION FUNCTIONALITY
-
-	const handleLogFile = () => {
-		alert('Log feature is under construction!');
-	};
-
 	return (
 		<div className="upload-manifest-container">
 			{/* Navbar */}
-			<Navbar onLogFile = {handleLogFile} />
+			<Navbar />
 
 			{/* Upload Section */}
 			<div className='upload-section'>
 				<form onSubmit={handleSubmit} >
-					<label htmlFor="manifest" className='upload-button'>Upload Manifest File
+					<label htmlFor="manifest" className='upload-button'>
+						Upload Manifest File
 						<input	type = 'file' 
 								id ='manifest' 
 								accept='.txt,.csv' 
@@ -59,13 +68,18 @@ function UploadManifest() {
 						<h3>Current Manifest File:</h3>
 						<p className='file-name'>{fileName}</p>
 					</div>
-					<button type='submit' className='btn btn-primary mt-4'>
-						Submit
-					</button>
+
+
+					{/* display continue to select task after upload */}
+					{file && (
+						<button type='submit' className='btn btn-primary mt-4'>
+						Continue to Select Task
+						</button>
+					)}	
 				</form>
 			</div>
 		</div>
-	)
+	);
 }
 
 export default UploadManifest;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Navbar.css';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/KawrgoJumperLogoNarrow.png';
 
 function Navbar({ onLogFile, onLogout}) {
 	const navigate = useNavigate();
@@ -21,19 +22,55 @@ function Navbar({ onLogFile, onLogout}) {
 		);
 		if (confirmLogout) {
 			alert ('You have been logged out.');
+			localStorage.removeItem('username');			//clear username?
 			navigate('/');							//redirect to home page(login)
 		}
 	}
 
 	return (
-		<nav className='navbar navbar-expand-lg navbar-dark bg-primary'>
+		<nav className='navbar navbar-expand-lg navbar-dark fixed-top'>
 			<div className='container-fluid'>
-				<a className="navbar-brand" href="#">
+				{/* logo/brand */}
+				{/* <a className="navbar-brand" href="#">
 					KawrgoJumper
-				</a>
-			</div>		
+				</a> */}
+				<img src = {logo} alt = "KawrgoJumper Logo" className='navbar-brand'></img>
+
+				{/* Navigation Buttons */}
+				<div className='collapse navbar-collapse'>
+					<ul className='navbar-nav ms-auto'>
+						{/* Log button */}
+						<li className='nav-item'>
+							<button	className='btn btn-outline-light me-2'
+									onClick={handleLogClick}>
+								ENTER LOG NOTE
+							</button>
+						</li>
+
+						{/* Logout button */}
+						<li className='nav-item'>
+							<button className='btn btn-outline-light' onClick={handleLogout}>
+								LOG OUT
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			{/* Log input box displayed when log button is clicked 
+					#############TO DO: Maybe need to move this away from nav bar##################*/}
+			{showLogInput && (
+				<div className='log-input-container'>
+					<textarea	className='log-input-box'
+								placeholder='Enter log message...'
+					/>
+					<button className = "btn btn-primary mt-2" onClick={onLogFile}>
+						Submit Log
+					</button>
+				</div>
+			)}
 		</nav>
-	)
+	);
 }
 
 export default Navbar;

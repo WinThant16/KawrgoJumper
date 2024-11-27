@@ -1,0 +1,59 @@
+/* src/styles/Navbar.css*/
+
+/* fixed navbar to top */
+.fixed-top {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1030; /* Ensure it's above other elements */
+	background-color: #e0e0e0;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* logo styling */
+.navbar-brand {
+	width: 5%;
+	height: 3%;
+	color: #ffffff;
+}
+
+/* log input container */
+.log-input-container {
+	position: absolute;
+	top: 70px;
+	right: 20px;
+	background-color: white;
+	border: 1px solid #ddd;
+	border-radius: 7px;
+	padding: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	z-index: 1050;
+	width: 300px;
+}
+
+/* submit log button */
+.log-input-container button {
+	display: block;
+	width: 100%;
+	margin-top: 10px;
+}
+
+/* navbar buttons (log and logout) */
+.nav-item button {
+	padding: 8px 16px;
+	font-weight: 450;
+	font-size: 16px;
+	border: none;
+	border-radius: 4px;
+	background-color: #003C7D;
+	color: white;
+	border: 2px solid transparent;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.nav-item button:hover {
+	background-color: #0056b3;
+	color: #ffffff;
+}
