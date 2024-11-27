@@ -1,0 +1,25 @@
+/* src/styles/UploadManifest.css */
+.upload-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background-color: #f2f2ff;
+}
+
+.upload-form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+#manifest {
+	padding: 8px;
+	font-size: 16px;
+}
+
+button {
+	padding: 10px;
+	font-size: 16px;
+	cursor: pointer;
+}

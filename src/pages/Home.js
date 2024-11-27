@@ -22,12 +22,12 @@ function Home() {
 			{/* <h1>Welcome to KawrgoJumper</h1> */}
 			<input
 				type = "text"
-				placeholder="Username"
+				placeholder="USERNAME"
 				value ={username}
 				onChange={(e) => setUsername(e.target.value)}
 				className='home-input'/>
 			<button onClick={handleLogin} className='home-login-button'>
-				Login
+				Log In
 			</button>
 		</div>
 	);
