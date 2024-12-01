@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import logo from '../assets/KawrgoJumperShippingLogisticsLogo.png';
 import '../styles/Home.css';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ function Home() {
 		if (username) {
 			localStorage.setItem('username', username);
 			//navigate to previous page, if set
-			if (localStorage.manifestFileName){
+			if (localStorage.currentPage){
 				navigate(`/${localStorage.currentPage}`)
 			}else{
 				navigate('/upload-manifest');
@@ -21,6 +21,12 @@ function Home() {
 			alert('Please enter username.');
 		}
 	};
+
+	useEffect(() => {
+		if (localStorage.username){
+			navigate(`/${localStorage.currentPage}`)
+		}
+	}, []);
 
 	return (
 		<div className="home-container">
