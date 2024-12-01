@@ -9,6 +9,7 @@ function Home() {
 
 	const handleLogin = () => {
 		if (username) {
+			localStorage.setItem('username', username);
 			navigate('/upload-manifest');
 		}
 		else {
