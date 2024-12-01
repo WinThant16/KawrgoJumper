@@ -10,7 +10,12 @@ function Home() {
 	const handleLogin = () => {
 		if (username) {
 			localStorage.setItem('username', username);
-			navigate('/upload-manifest');
+			//navigate to previous page, if set
+			if (localStorage.manifestFileName){
+				navigate(`/${localStorage.currentPage}`)
+			}else{
+				navigate('/upload-manifest');
+			}
 		}
 		else {
 			alert('Please enter username.');
