@@ -14,8 +14,9 @@ function TaskSelection() {
       navigate("/load-unload-selection");
     } else if (type === 1){
       navigate("/balance");
+    }else{
+      alert("set task called with invalid args")
     }
-    alert("set task called with invalid args")
   };
 
   return (
