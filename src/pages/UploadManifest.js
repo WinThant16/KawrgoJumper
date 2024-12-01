@@ -8,12 +8,12 @@ function UploadManifest() {
 	const [fileName, setFileName] = useState('None');     //state to track uploaded file's name
 	const [file, setFile] = useState(null);				  //state to store actual file object
 	const navigate = useNavigate();						  // state with navigation hook for moving to next page
-
+	localStorage.setItem('currentPage', 'upload-manifest');		//update current page in local storage
 	/*
 	* Load progress from local storage when component is mounted.
 	*/
 	useEffect(() => {
-		const savedFileName = localStorage.getItem('manifestFile'); // Get saved file name
+		const savedFileName = localStorage.getItem('manifestFileName'); // Get saved file name
 		if (savedFileName) {
 			setFileName(savedFileName); // Restore the saved file name
 			setFile({ name: savedFileName }); // Simulate a file object
@@ -28,8 +28,8 @@ function UploadManifest() {
 		if (selectedFile) {
 			setFileName(selectedFile.name);					//update state with selected file
 			setFile(selectedFile);							//store selected file object
-			localStorage.setItem('manifestFile', selectedFile.name);	//save file name in local storage
-			localStorage.setItem('currentPage', 'upload-manifest');		//save current page in local storage
+			localStorage.setItem('manifestFileName', selectedFile.name);	//save file name in local storage
+			selectedFile.text().then(text => localStorage.setItem('manifestFile', text));	//save file content in local storage
 		}
 	};
 	/* 	this handles form submission.
@@ -40,7 +40,6 @@ function UploadManifest() {
 		if (file) {
 			// alert(`Manifest file "${file.name}" uploaded successfully!`)			//to debug, commented out now.
 			console.log('File uploaded:', file.name); //log uploaded name to debug
-			localStorage.setItem('currentPage', 'task-selection');		//update the current page
 			navigate('/task-selection');              //navigate to next page
 		} else {
 			alert ('Please upload a manifest file.'); //show alert if no file is selected.
