@@ -27,6 +27,20 @@ function Navbar({ onLogFile, onLogout}) {
 		}
 	}
 
+	const handleRestart = () => {
+		const confirmRestart = window.confirm(					//confirm method is simple for now, can customize later?
+			'Are you sure you want to restart (return to manifest upload)?'
+		);
+		if (confirmRestart) {
+			localStorage.removeItem('manifestFileName');	//clear manifest name
+			localStorage.removeItem('manifestFile');	//clear manifest contents
+			// We'll have to clear more here as we save more variables 
+			navigate(0);
+			navigate('/upload-manifest'); //redirect to upload-manifest
+			
+		}
+	}
+
 	return (
 		<nav className='navbar navbar-expand-lg navbar-dark fixed-top'>
 			<div className='container-fluid'>
@@ -46,13 +60,19 @@ function Navbar({ onLogFile, onLogout}) {
 								ENTER LOG NOTE
 							</button>
 						</li>
-
+						{/* Restart button */}
+						<li className='nav-item'>
+							<button className='btn btn-outline-light me-2' onClick={handleRestart}>
+								RESTART
+							</button>
+						</li>
 						{/* Logout button */}
 						<li className='nav-item'>
-							<button className='btn btn-outline-light' onClick={handleLogout}>
+							<button className='btn btn-outline-light me-2' onClick={handleLogout}>
 								LOG OUT
 							</button>
 						</li>
+
 					</ul>
 				</div>
 			</div>
