@@ -1,0 +1,128 @@
+/* src/styles/UploadManifest.css */
+
+/* Main container for the upload page */
+.upload-manifest-container {
+	display: flex;
+	justify-content: center; /* Center container horizontally */
+	align-items: center; /* Center container vertically */
+	flex-direction: column;
+	background-color: #f9f9f9;
+	min-height: 100vh;
+	margin: 0;
+}
+
+/* Upload section styling */
+.upload-section {
+	display: flex;
+	flex-direction: column;
+	align-items: center; /* Center content horizontally */
+	justify-content: center; /* Center content vertically */
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 30px;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+	max-width: 500px;
+	width: 100%;
+}
+
+/* Styling for the upload button */
+.upload-button {
+	display: flex; /* Use flexbox for better alignment */
+	justify-content: center; /* Center the button text horizontally */
+	align-items: center; /* Center the button text vertically */
+	background-color: #003C7D;
+	color: #ffffff;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 15px 30px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	text-align: center;
+	position: relative;
+	width: 100%; /* Ensure the button takes up the available width */
+	max-width: 300px; /* Limit the button width */
+	margin-bottom: 20px; /* Add space below the button */
+}
+
+.upload-button:hover {
+	background-color: #0056b3;
+}
+
+/* Restrict pointer and click to the button area only */
+.upload-button input.file-input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+
+/* Display for the current file */
+.current-file {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.current-file h3 {
+	font-size: 20px;
+	color: #333333;
+	margin-bottom: 8px;
+}
+
+.file-name {
+	font-size: 18px;
+	color: #555555;
+	background-color: #f1f1f1;
+	padding: 10px 20px;
+	border-radius: 5px;
+	display: inline-block;
+	font-weight: bold;
+	border: 1px solid #ccc;
+}
+
+/* Submit button styling */
+button[type="submit"] {
+	background-color: #003C7D;
+	color: #ffffff;
+	padding: 12px 24px;
+	font-size: 18px;
+	font-weight: bold;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	text-align: center;
+	display: block; /* Ensure the button is block-level */
+	margin: 20px auto 0; /* Center the button */
+}
+
+button[type="submit"]:hover {
+	background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.upload-section {
+		padding: 20px;
+	}
+
+	.upload-button {
+		font-size: 16px;
+		padding: 12px 20px;
+		max-width: 100%; /* Allow full-width on smaller screens */
+	}
+
+	.file-name {
+		font-size: 16px;
+	}
+
+	button[type="submit"] {
+		padding: 10px 20px;
+		font-size: 14px;
+	}
+}
