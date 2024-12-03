@@ -1,0 +1,38 @@
+.select-containers-cont{
+    display: flex;
+    padding-top: 80px;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.content-container{
+    width: 90%;
+    text-align: center;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 5px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.grid-row{
+    display: contents;
+}
+
+.grid-cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-size: 15px;
+    background-color: rgb(206, 203, 203);
+    text-align: center;
+    height: 60px;
+    width: 80px;
+    cursor: pointer;
+}

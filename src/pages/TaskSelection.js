@@ -11,7 +11,7 @@ function TaskSelection() {
   // 1 is balance
   function setTask(type) {
     if (type === 0) {
-      navigate("/load-unload-selection");
+      navigate("/select-containers");
     } else if (type === 1){
       navigate("/balance");
     }else{
