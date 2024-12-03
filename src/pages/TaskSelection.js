@@ -11,8 +11,10 @@ function TaskSelection() {
   // 1 is balance
   function setTask(type) {
     if (type === 0) {
+      localStorage.setItem("jobType", "Load/Unload");
       navigate("/select-containers");
     } else if (type === 1){
+      localStorage.setItem("jobType", "Balance");
       navigate("/balance");
     }else{
       alert("set task called with invalid args")

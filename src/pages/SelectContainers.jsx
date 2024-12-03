@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from "react";
 import Navbar from "../components/Navbar";
 import "../styles/SelectContainers.css";
+import { useNavigate } from "react-router-dom";
 
 function SelectContainers(){
   const [gridData, setGridData] = useState([]);
   const [selectedContainers, setSelectedContainers] = useState([]);
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
+  const currentFile = localStorage.getItem("manifestFileName");
+  const jobType = localStorage.getItem("jobType");
+  const navigate = useNavigate();
 
   const loadManifest = () => {
     const manifest = localStorage.getItem("manifestFile");
@@ -59,6 +63,10 @@ function SelectContainers(){
     }
   };
 
+  const beginProcess = () =>{
+    navigate("/move-containers");
+  }
+
   const displayGrid = () => {
     return gridData.map((row, rowIndex) => (
       <div key={`row-${rowIndex}`} className="grid-row">
@@ -110,6 +118,17 @@ function SelectContainers(){
   return (
     <div className="select-containers-page">
       <Navbar />
+      <div className="info-section">
+        <div className="info-box">
+          <p><strong>Current File:</strong></p>
+          <p>{currentFile}</p>
+        </div>
+        <div className="info-box">
+          <p><strong>Job:</strong></p>
+          <p>{jobType}</p>
+        </div>
+        <button className="begin-button" onClick={beginProcess}>Begin</button>
+      </div>
       <div className="content-container">
         <h1>Please Select Containers to Unload</h1>
         <div className="grid-container">{displayGrid()}</div>
