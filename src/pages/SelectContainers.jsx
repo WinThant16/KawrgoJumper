@@ -4,6 +4,8 @@ import "../styles/SelectContainers.css";
 
 function SelectContainers(){
   const [gridData, setGridData] = useState([]);
+  const [selectedContainers, setSelectedContainers] = useState([]);
+  const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
 
   const loadManifest = () => {
     const manifest = localStorage.getItem("manifestFile");
@@ -34,8 +36,8 @@ function SelectContainers(){
       const rowIdx = 8 - row;
       const colIdx = col - 1;
 
-      if(rowIdx >= 0 && colIdx >= 0 && rowIdx < rows && colIdx < cols){
-        grid[rowIdx][colIdx] = { id: '${row},${col}', name: name.trim(), weight: parseInt(weight.replace(/[{}]/g, 10))};
+      if (rowIdx >= 0 && colIdx >= 0 && rowIdx < rows && colIdx < cols){
+        grid[rowIdx][colIdx] = { id: `${row},${col}`, name: name.trim(), weight: parseInt(weight.replace(/[{}]/g, ""), 10),};
       }
     }
     setGridData(grid);
@@ -44,37 +46,73 @@ function SelectContainers(){
   useEffect(() => {
     loadManifest();
   }, []);
-  
+
+  const selectedContainer = (row, col, container) => {
+    if (container.name === "UNUSED" || container.name === "NAN") return;
+    const key = `[${8 - row},${col + 1}]`;
+    const isSelected = selectedContainers.some((item) => item.position === key);
+
+    if (isSelected) {
+      setSelectedContainers(selectedContainers.filter((item) => item.position !== key));
+    } else {
+      setSelectedContainers([...selectedContainers, { position: key, name: container.name, weight: container.weight }]);
+    }
+  };
+
+  const displayGrid = () => {
+    return gridData.map((row, rowIndex) => (
+      <div key={`row-${rowIndex}`} className="grid-row">
+        {row.map((cell, colIndex) => {
+          let className;
+          if (cell.name === "NAN") {
+            className = "grid-cell nan";
+          } else if (cell.name === "UNUSED") {
+            className = "grid-cell unused";
+          } else {
+            className = selectedContainers.some(
+              (item) => item.position === `[${8 - rowIndex},${colIndex + 1}]`
+            )
+              ? "grid-cell used selected"
+              : "grid-cell used";
+          }
+
+          return (
+            <div
+              key={`cell-${rowIndex}-${colIndex}`}
+              className={className}
+              onMouseEnter={() =>
+                setHoveredContainer({
+                  name: cell.name,
+                  weight: cell.weight,
+                  row: rowIndex,
+                  col: colIndex,
+                })
+              }
+              onMouseLeave={() => setHoveredContainer({ name: "", weight: "", row: 0, col: 0 })}
+              onClick={() => selectedContainer(rowIndex, colIndex, cell)}
+            >
+              {cell.name !== "NAN" ? cell.name.split(" ")[0] : ""}
+              {hoveredContainer.name === cell.name &&
+                hoveredContainer.row === rowIndex &&
+                hoveredContainer.col === colIndex && (
+                  <div className="hover-popup">
+                    <p>{`Name: ${cell.name}`}</p>
+                    <p>{`Weight: ${cell.weight}kg`}</p>
+                  </div>
+                )}
+            </div>
+          );
+        })}
+      </div>
+    ));
+  };
+
   return (
     <div className="select-containers-page">
       <Navbar />
       <div className="content-container">
         <h1>Please Select Containers to Unload</h1>
-        <div className="grid-container">
-          {gridData.map((row, rowIndex) => (
-            <div key={`row-${rowIndex}`} className="grid-row">
-              {row.map((cell, colIndex) => {
-                let className;
-                if (cell.name === "NAN") {
-                  className = "grid-cell nan";
-                } else if (cell.name === "UNUSED") {
-                  className = "grid-cell unused";
-                } else {
-                  className = "grid-cell filled";
-                }
-
-                return (
-                  <div
-                    key={`cell-${rowIndex}-${colIndex}`}
-                    className={className}
-                  >
-                    {cell.name !== "NAN" ? cell.name.split(" ")[0] : ""}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <div className="grid-container">{displayGrid()}</div>
       </div>
     </div>
   );

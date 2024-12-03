@@ -34,7 +34,6 @@
     text-align: center;
     height: 60px;
     width: 80px;
-    cursor: pointer;
 }
 
 .grid-cell.nan {
@@ -47,8 +46,29 @@
     color: white;
 }
 
-.grid-cell.filled{
+.grid-cell.used{
     background-color: #007bff;
     color: white;
     font-weight: bold;
+}
+
+.grid-cell.used.selected {
+    background-color: #28a745; 
+  }
+  
+.hover-popup {
+    position: absolute;
+    transform: translate(0%, -125%);
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+  
+.hover-popup p {
+    margin: 0;
+    font-size: 12px;
 }
