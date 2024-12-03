@@ -36,4 +36,6 @@ function parse_manifest(manifest_text){
 
 }
 
-console.log(parse_manifest(require("fs").readFileSync("./ShipCase1.txt", "utf-8")))
+module.exports = {parse_manifest, container}
+
+//console.log(parse_manifest(require("fs").readFileSync("./ShipCase1.txt", "utf-8")))
