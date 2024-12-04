@@ -40,7 +40,7 @@ function UploadManifest() {
 				localStorage.setItem('manifestSettled', true);   //mark as settled in localStorage
 				
 			});
-			e.target.value = ''; //prevents issues on reupload? resets file input after selection.
+			// e.target.value = ''; 		
 			// setFile(selectedFile);							//store selected file object
 			// localStorage.setItem('manifestFileName', selectedFile.name);	//save file name in local storage
 			// selectedFile.text().then(text => localStorage.setItem('manifestFile', text));	//save file content in local storage
