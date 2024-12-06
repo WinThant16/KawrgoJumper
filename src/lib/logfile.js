@@ -40,7 +40,7 @@ class logFileHandler{
     // enqueue a log entry to be written to the log file
     writeEntry(Text){
         const DateObj = new Date()
-        let month = DateObj.getMonth();
+        let month = DateObj.getMonth() + 1;
         let day = DateObj.getDate();
         let hour = DateObj.getHours();
         let min = DateObj.getMinutes();
