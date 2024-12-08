@@ -61,6 +61,16 @@ function parse_manifest(manifest_text){
 
 }
 
-module.exports = {parse_manifest, container}
+// return a manifest matrix back to the original file format
+function matrix_to_string(manifest_matrix){
+    const str = []
+    for(let i=0; i<manifest_matrix.length; i++){
+        for(let j=0; j<manifest_matrix[0].length; j++){ 
+        const col = `[${manifest_matrix[i][j].row},${manifest_matrix[i][j].col}], {${manifest_matrix[i][j].weight}}, ${manifest_matrix[i][j].name}`
+        str.push(col);
+        }
+    }
+    return str.join("\n");
+}
 
-//console.log(parse_manifest(require("fs").readFileSync("./ShipCase1.txt", "utf-8")))
+module.exports = {parse_manifest, matrix_to_string, container}
