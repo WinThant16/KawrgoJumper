@@ -10,6 +10,31 @@ class container{
         this.weight = weight;
         this.name = name;
     }
+    clone(){
+        return new container(this.row, this.col, this.weight, this.name);
+    }
+    swap(containerToSwapWith){
+        console.log("this ", this);
+        console.log("swapping ", containerToSwapWith)
+        const containerClone = containerToSwapWith.clone();
+        console.log("clone", containerClone);
+        containerToSwapWith.row = this.row;
+        containerToSwapWith.col = this.col;
+        containerToSwapWith.weight = this.weight;
+        containerToSwapWith.name = this.name;
+
+        this.row = containerClone.row;
+        this.col = containerClone.col;
+        this.weight = containerClone.weight;
+        this.name = containerClone.name;
+        console.log("post this ", this);
+        console.log("post swapping ", containerToSwapWith)
+        console.log("post clone", containerClone);
+    }
+    clear(){
+        this.weight = '00000';
+        this.name = 'UNUSED';
+    }
 }
 
 function parse_manifest(manifest_text){
