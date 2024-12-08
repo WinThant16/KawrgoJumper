@@ -15,6 +15,7 @@ class manifest{
     contents;
 }
 const currentManifest = new manifest();
+
 /*
  Log file endpoint 
  Type: POST
@@ -35,7 +36,6 @@ app.post('/api/submitLogEntry', function(req, res){
 */
 app.post('/api/uploadManifest', function(req, res){
     console.log("Received uploadManifest");
-    console.log(req.body);
     currentManifest.name = req.body.fileName;
     currentManifest.contents = req.body.fileContents;
     console.log(currentManifest)
@@ -50,7 +50,10 @@ app.post('/api/uploadManifest', function(req, res){
 */
 app.get('/api/getCurrentManifest', function(req, res){
     console.log("Received getCurrentManifest");
-    res.send(currentManifest);
+    res.send({
+        "name":currentManifest.name,
+        "contents": currentManifest.contents
+    });
 });
 
 /*
@@ -74,3 +77,7 @@ app.post('/api/computeLoad', function(req, res){
 
     res.send("Not Implemented");
 });
+
+app.get('*', (req, res) => {                       
+    res.sendFile(require("path").resolve('./build', 'index.html'));                               
+  });
