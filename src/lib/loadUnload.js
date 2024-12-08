@@ -293,8 +293,8 @@ function computeUnload(manifest_matrix, containers_to_unload){
 //displayGraph(manifest_matrix);
 //console.log(getFirstEmptyRowInCol(manifest_matrix, 1));
 
-let steps = computeUnload(manifest_matrix, [[0,1]]);
-console.log(steps)
+//let steps = computeUnload(manifest_matrix, [[0,1]]);
+//console.log(steps)
 
 // basically pick closest unused slot a bunch of times
 function computeLoad(manifest_matrix, amount){
