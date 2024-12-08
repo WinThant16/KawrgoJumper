@@ -14,7 +14,7 @@ class manifest{
     name;
     contents;
 }
-const currentManifest = new manifest;
+const currentManifest = new manifest();
 /*
  Log file endpoint 
  Type: POST
@@ -23,7 +23,7 @@ const currentManifest = new manifest;
 */
 app.post('/api/submitLogEntry', function(req, res){
     console.log("Received SubmitLogEntry");
-    console.log(req.body)
+    console.log(req.body);
     log_file_handler.writeEntry(req.body);
     res.send("OK");
 });
