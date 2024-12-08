@@ -5,6 +5,9 @@ const server = app.listen(8080);
 const lfh = require("../lib/logfile.js");
 const log_file_handler = new lfh.logFileHandler()
 
+const {computeUnload, computeLoad} = require("../lib/loadUnload.js");
+const { parse_manifest } = require('../lib/manifest_parser.js');
+
 app.use(express.text());
 app.use(express.json());
 
@@ -13,6 +16,7 @@ app.use(express.static('./build'));
 class manifest{
     name;
     contents;
+    parsed;
 }
 const currentManifest = new manifest();
 
@@ -38,8 +42,9 @@ app.post('/api/uploadManifest', function(req, res){
     console.log("Received uploadManifest");
     currentManifest.name = req.body.fileName;
     currentManifest.contents = req.body.fileContents;
-    console.log(currentManifest)
     res.send("OK");
+    currentManifest.parsed = parse_manifest(currentManifest.contents);
+    console.log(currentManifest)
 });
 
 
@@ -59,23 +64,25 @@ app.get('/api/getCurrentManifest', function(req, res){
 /*
  Compute Unload Steps on current manifest
  Type: POST
- Body: JSON payload: 
+ Body: JSON payload of containers to unload: {containers: [[1,2],[3,4],[5,6]]}
 */
 app.post('/api/computeUnload', function(req, res){
     console.log("Received computeUnload");
-
-    res.send("Not Implemented");
+    const containers = req.body.containers;
+    const steps = computeUnload(currentManifest.parsed, containers);
+    res.send(steps);
 });
 
 /*
  Compute Unload Steps on current manifest
  Type: POST
- Body: JSON payload: 
+ Body: JSON payload: amount of containers {amount: 3}
 */
 app.post('/api/computeLoad', function(req, res){
     console.log("Received computeLoad");
-
-    res.send("Not Implemented");
+    const amount = req.body.amount;
+    const steps = computeLoad(currentManifest.parsed, amount);
+    res.send(steps);
 });
 
 app.get('*', (req, res) => {                       
