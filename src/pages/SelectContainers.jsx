@@ -130,12 +130,12 @@ function SelectContainers(){
       <Navbar />
       <div className="info-section">
         <div className="info-box">
-          <p><strong>Current File: </strong></p>
-          <p>{currentFile}</p>
+          <span className="info-label"><strong>Current File: </strong></span>
+          <span className="info-value">{currentFile}</span>
         </div>
         <div className="info-box">
-          <p><strong>Job:</strong></p>
-          <p>{jobType}</p>
+          <span className="info-label"><strong>Job:</strong></span>
+          <span className="info-value">{jobType}</span>
         </div>
         <button className="begin-button" onClick={beginProcess}>Begin</button>
       </div>

@@ -109,6 +109,18 @@
     padding: 10px 15px;
     border-radius: 5px;
     font-weight: bold;
+    gap: 10px;
+}
+
+.info-label {
+    margin-right: 10px;
+}
+
+.info-value {
+    font-weight: normal;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
 }
 
 .info-box p {
