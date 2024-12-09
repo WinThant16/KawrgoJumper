@@ -5,12 +5,15 @@
   justify-content: center;
   background-color: #f9f9f9;
   min-height: 100vh; 
+  max-height: 100vh;
   padding: 20px;
+  padding-top: 0px;
   box-sizing: border-box;
 }
 
 .content-container{
-    padding-top: 25px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     width: 90%;
     text-align: center;
 }
@@ -35,8 +38,18 @@
     font-size: 15px;
     background-color: rgb(206, 203, 203);
     text-align: center;
-    height: 70px;
+    height: 60px;
     width: 90px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.grid-cell .cell-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .grid-cell.nan {
@@ -78,6 +91,7 @@
 
 .info-section {
     display: flex;
+    margin-top: 60px;
     justify-content: flex-start;
     align-items: center;
     background-color: #f8f9fa;
@@ -101,6 +115,14 @@
     margin: 0;
     font-size: 14px;
     color: #333;
+}
+
+.grid-cell.used:hover {
+    cursor:pointer;
+}
+
+.grid-cell.grid-cell.used.selected:hover {
+    cursor: pointer;
 }
       
 .begin-button {

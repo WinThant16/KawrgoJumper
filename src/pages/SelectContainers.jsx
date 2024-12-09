@@ -12,7 +12,7 @@ function SelectContainers(){
   const navigate = useNavigate();
 
   const loadManifest = () => {
-    const manifest = localStorage.getItem("manifestFile");
+    const manifest = localStorage.getItem("manifestFileContent");
 
     const rows = 8;
     const cols = 12;
@@ -67,6 +67,13 @@ function SelectContainers(){
     navigate("/move-containers");
   }
 
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    }
+    return text;
+  }
+
   const displayGrid = () => {
     return gridData.map((row, rowIndex) => (
       <div key={`row-${rowIndex}`} className="grid-row">
@@ -83,6 +90,8 @@ function SelectContainers(){
               ? "grid-cell used selected"
               : "grid-cell used";
           }
+          
+          const truncatedName = truncateText(cell.name, 8);      //max length set to 12.
 
           return (
             <div
@@ -99,7 +108,8 @@ function SelectContainers(){
               onMouseLeave={() => setHoveredContainer({ name: "", weight: "", row: 0, col: 0 })}
               onClick={() => selectedContainer(rowIndex, colIndex, cell)}
             >
-              {cell.name !== "NAN" ? cell.name.split(" ")[0] : ""}
+              <span className="cell-text">{truncatedName}</span>
+              {/* {cell.name !== "NAN" ? cell.name.split(" ")[0] : ""} */}
               {hoveredContainer.name === cell.name &&
                 hoveredContainer.row === rowIndex &&
                 hoveredContainer.col === colIndex && (
@@ -120,7 +130,7 @@ function SelectContainers(){
       <Navbar />
       <div className="info-section">
         <div className="info-box">
-          <p><strong>Current File:</strong></p>
+          <p><strong>Current File: </strong></p>
           <p>{currentFile}</p>
         </div>
         <div className="info-box">
@@ -130,7 +140,7 @@ function SelectContainers(){
         <button className="begin-button" onClick={beginProcess}>Begin</button>
       </div>
       <div className="content-container">
-        <h1>Please Select Containers to Unload</h1>
+        <h4>Please Select Containers to Unload</h4>
         <div className="grid-container">{displayGrid()}</div>
       </div>
     </div>
