@@ -52,7 +52,6 @@ function SelectContainers(){
     loadManifest();
   }, []);
 
-  submitLog (`Selecting Containers to Unload for Current Task.`);
   const selectedContainer = (row, col, container) => {
     if (container.name === "UNUSED" || container.name === "NAN") return;
     const key = `[${8 - row},${col + 1}]`;
@@ -70,6 +69,7 @@ function SelectContainers(){
   };
 
   const beginProcess = () =>{
+    submitLog("Done Selecting Containers to Unload.");
     navigate("/move-containers");
   }
 

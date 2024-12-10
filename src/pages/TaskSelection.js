@@ -14,6 +14,7 @@ function TaskSelection() {
     if (type === 0) {
       localStorage.setItem("jobType", "Load/Unload");
       submitLog("Load/Unload Operation was selected.");
+      submitLog("Selecting Containers to Unload.");
       navigate("/select-containers");
     } else if (type === 1){
       localStorage.setItem("jobType", "Balance");
