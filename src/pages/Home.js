@@ -2,6 +2,10 @@ import React, { useState, useEffect} from 'react';
 import logo from '../assets/KawrgoJumperShippingLogisticsLogo.png';
 import '../styles/Home.css';
 import { useNavigate } from 'react-router-dom';
+// const { logFileHandler } = require('../lib/logfile.js');
+
+// const logger = new logFileHandler();			//initialize logger
+import { submitLog } from '../lib/requestLib';
 
 function Home() {
 	const [username, setUsername] = useState('');
@@ -9,6 +13,8 @@ function Home() {
 
 	const handleLogin = () => {
 		if (username) {
+			submitLog(username + " has logged in.");
+			// logger.writeEntry(`${username} has logged in.`);
 			localStorage.setItem('username', username);
 			//navigate to previous page, if set
 			if (localStorage.currentPage){

@@ -11,7 +11,10 @@ const { parse_manifest } = require('../lib/manifest_parser.js');
 app.use(express.text());
 app.use(express.json());
 
-app.use(express.static('./build'));
+// app.use(express.static('./build'));
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../../build')));
+
 
 class manifest{
     name;
@@ -85,6 +88,10 @@ app.post('/api/computeLoad', function(req, res){
     res.send(steps);
 });
 
-app.get('*', (req, res) => {                       
-    res.sendFile(require("path").resolve('./build', 'index.html'));                               
-  });
+// app.get('*', (req, res) => {                       
+//     res.sendFile(require("path").resolve('./build', 'index.html'));                               
+//   });
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../build', 'index.html'));
+});
