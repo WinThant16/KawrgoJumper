@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import Navbar from "../components/Navbar";
 import "../styles/SelectContainers.css";
 import { useNavigate } from "react-router-dom";
+import { submitLog } from "../lib/requestLib";
 
 function SelectContainers(){
   const [gridData, setGridData] = useState([]);
@@ -51,15 +52,20 @@ function SelectContainers(){
     loadManifest();
   }, []);
 
+  submitLog (`Selecting Containers to Unload for Current Task.`);
   const selectedContainer = (row, col, container) => {
     if (container.name === "UNUSED" || container.name === "NAN") return;
     const key = `[${8 - row},${col + 1}]`;
     const isSelected = selectedContainers.some((item) => item.position === key);
 
+    const cont_name = container.name;
     if (isSelected) {
+      
       setSelectedContainers(selectedContainers.filter((item) => item.position !== key));
+      submitLog (`Container '${cont_name}' at position [${8-row},${col+1}] is deselected.`);
     } else {
       setSelectedContainers([...selectedContainers, { position: key, name: container.name, weight: container.weight }]);
+      submitLog (`Container '${cont_name}' at position [${8-row},${col+1}] is selected.`);
     }
   };
 

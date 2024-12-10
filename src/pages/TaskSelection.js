@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/TaskSelection.css";
 import Navbar from "../components/Navbar.js";
 import { useNavigate } from "react-router-dom";
+import { submitLog } from "../lib/requestLib.js";
 
 function TaskSelection() {
   const navigate = useNavigate();
@@ -12,9 +13,11 @@ function TaskSelection() {
   function setTask(type) {
     if (type === 0) {
       localStorage.setItem("jobType", "Load/Unload");
+      submitLog("Load/Unload Operation was selected.");
       navigate("/select-containers");
     } else if (type === 1){
       localStorage.setItem("jobType", "Balance");
+      submitLog("Balance Operation was selected.");
       navigate("/balance");
     }else{
       alert("set task called with invalid args")
