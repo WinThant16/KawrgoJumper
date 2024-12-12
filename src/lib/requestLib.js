@@ -40,9 +40,9 @@ async function computeLoad(amount_of_containers_to_load){
   return res.data;
 }
 
-const reqLib = {submitLog, uploadManifest, getCurrentManifest}
+const reqLib = {submitLog, uploadManifest, getCurrentManifest, computeUnload, computeLoad}
 
-export {submitLog, uploadManifest, getCurrentManifest};
+export {submitLog, uploadManifest, getCurrentManifest, computeUnload, computeLoad};
 export default reqLib;
 
 //computeUnload([[0,1]]).then((steps)=>{console.log(steps)});
