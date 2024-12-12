@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import "../styles/Balance.css";
 import { useNavigate } from "react-router-dom";
 
+/*testing branch*/
 function Balance(){
   const [gridData, setGridData] = useState([]);
   const [containersToBalance, setContainersToBalance] = useState([]);
@@ -89,7 +90,7 @@ function Balance(){
           }
           
           const position = `[${8 - rowIndex}, ${colIndex + 1}]`;
-          
+
           return (
             <div
               key={`cell-${rowIndex}-${colIndex}`}
