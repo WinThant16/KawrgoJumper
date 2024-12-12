@@ -1,0 +1,141 @@
+.select-containers-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  min-height: 100vh; 
+  max-height: 100vh;
+  padding: 20px;
+  padding-top: 0px;
+  box-sizing: border-box;
+}
+
+.content-container{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 90%;
+    text-align: center;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    margin: 20px auto;
+    width: 100%;
+    max-width: 1080px;
+}
+
+.grid-row{
+    display: contents;
+}
+
+.grid-cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-size: 15px;
+    background-color: rgb(206, 203, 203);
+    text-align: center;
+    height: 60px;
+    width: 90px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.grid-cell .cell-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.grid-cell.nan {
+    background-color: #323232;
+    color: white;
+}
+
+.grid-cell.unused{
+    background-color: #aba8a8;
+    color: white;
+}
+
+.grid-cell.used{
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.grid-cell.used.selected {
+    background-color: #28a745; 
+  }
+  
+.hover-popup {
+    position: absolute;
+    transform: translate(0%, -125%);
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+  
+.hover-popup p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.info-section {
+    display: flex;
+    margin-top: 60px;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    gap: 150px;
+    font-size: 15px;
+}  
+
+.info-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #e0e0e0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.info-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.grid-cell.used:hover {
+    cursor:pointer;
+}
+
+.grid-cell.grid-cell.used.selected:hover {
+    cursor: pointer;
+}
+      
+.begin-button {
+    background-color: #003C7D;
+    color: #fff;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+}
+
+.begin-button:hover {
+    background-color: #0056b3;
+}
