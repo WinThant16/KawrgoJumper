@@ -12,17 +12,9 @@ function TaskSelection() {
   // Handle task selection
   function setTask(type) {
     if (type === 0) {
-<<<<<<< HEAD
-      // Load/Unload task
-      localStorage.setItem("jobType", "Load/Unload");
-      navigate("/load-containers"); // Updated to navigate to LoadContainers
-    } else if (type === 1) {
-      // Balance task
-=======
       localStorage.setItem("jobType", "Load/Unload");
       navigate("/select-containers");
     } else if (type === 1){
->>>>>>> a2894cd55960c77366889857b8ed331744f7c6bc
       localStorage.setItem("jobType", "Balance");
       navigate("/balance");
     } else {

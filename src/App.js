@@ -4,6 +4,8 @@ import Home from './pages/Home.js';
 import UploadManifest from './pages/UploadManifest.js';
 import TaskSelection from './pages/TaskSelection.js';
 import LoadContainers from './pages/LoadContainers.js';
+import Balance from './pages/Balance.jsx';
+import SelectContainers from './pages/SelectContainers.jsx';
 
 // import './App.css';
 
