@@ -1,0 +1,34 @@
+.move-containers-page {
+	padding-top: 100px; /* Adjust this based on Navbar height */
+}
+
+.controls {
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+  }
+  
+  button {
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+  }
+  
+  button:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+  }
+  
+  .grid-cell.source {
+	background-color: #ffcc00;
+  }
+  
+  .grid-cell.destination {
+	background-color: #00cc00;
+  }
+  
+  .grid-cell.path {
+	background-color: #00aaff;
+  }
+  

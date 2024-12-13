@@ -1,73 +1,74 @@
 .select-containers-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f9f9f9;
-  min-height: 90vh; 
-  max-height: 100vh;
-  padding: 20px;
-  padding-top: 0px;
-  box-sizing: border-box;
-}
-
-.content-container{
-    padding-bottom: 0px;
-    width: 90%;
-    text-align: center;
-}
-
-.info-section {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    gap: 200px;
-    font-size: 20px;
-	padding-bottom: 25px;
-}  
-
-.info-box{
-    display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: center;
-    background-color: #e0e0e0;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-weight: bold;
-    gap: 10px;
-}
-
-.info-label {
-    margin-right: 10px;
-}
-
-.info-value {
-    font-weight: normal;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-}
-
-.info-box p {
-    margin: 0;
-    font-size: 14px;
-    color: #333;
-}
-      
-.begin-button {
-    background-color: #003C7D;
-    color: #fff;
-    font-size: 20px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    border: none;
-}
-
-.begin-button:hover {
-    background-color: #0056b3;
-}
+    background-color: #f9f9f9;
+    min-height: 90vh; 
+    max-height: 100vh;
+    padding: 20px;
+    padding-top: 0px;
+    box-sizing: border-box;
+  }
+  
+  .content-container{
+      padding-bottom: 0px;
+      width: 90%;
+      text-align: center;
+  }
+  
+  .info-section {
+      display: flex;
+      margin-top: 60px;
+      justify-content: center;
+      align-items: center;
+      background-color: #f8f9fa;
+      padding: 10px 20px;
+      gap: 200px;
+      font-size: 20px;
+      padding-bottom: 25px;
+  }  
+  
+  .info-box{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      background-color: #e0e0e0;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      gap: 10px;
+  }
+  
+  .info-label {
+      margin-right: 10px;
+  }
+  
+  .info-value {
+      font-weight: normal;
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+  }
+  
+  .info-box p {
+      margin: 0;
+      font-size: 14px;
+      color: #333;
+  }
+        
+  .begin-button {
+      background-color: #003C7D;
+      color: #fff;
+      font-size: 20px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+  }
+  
+  .begin-button:hover {
+      background-color: #0056b3;
+  }

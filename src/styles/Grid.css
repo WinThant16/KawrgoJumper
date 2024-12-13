@@ -76,3 +76,27 @@
 .grid-cell.grid-cell.used.selected:hover {
     cursor: pointer;
 }
+
+
+.grid-cell.temporary {
+    background-color: grey;
+    color: white;
+}
+  
+.grid-cell.source {
+    background-color: green;
+    color: white;
+    font-weight: bold;
+}
+  
+.grid-cell.destination {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
+  
+.grid-cell.path {
+    background-color: blue;
+    color: white;
+}
+  
