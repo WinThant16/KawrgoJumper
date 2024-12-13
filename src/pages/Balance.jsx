@@ -20,14 +20,14 @@ function Balance(){
   const loadManifest = () => {
     const manifest = localStorage.getItem("manifestFileContent");
 
-    const rows = 8;
+    const rows = 10;
     const cols = 12;
     const grid = [];
 
     for(let i = 0; i < rows; i++){
       const row = [];
       for(let j = 0; j < cols; j++){
-        row.push({ id: null, name: "NAN", weight:"0"});
+        row.push({ id: null, name: "", weight:"0"});
       }
       grid.push(row);
     }
@@ -43,7 +43,7 @@ function Balance(){
       const row = parseInt(coordinates.substring(1,3));
       const col = parseInt(coordinates.substring(4,6));
 
-      const rowIdx = 8 - row;
+      const rowIdx = 10 - row;
       const colIdx = col - 1;
 
       if (rowIdx >= 0 && colIdx >= 0 && rowIdx < rows && colIdx < cols){
@@ -58,8 +58,8 @@ function Balance(){
   }, []);
 
   const selectedContainer = (row, col, container) => {
-    if (container.name === "UNUSED" || container.name === "NAN") return;
-    const key = `[${8 - row},${col + 1}]`;
+    if (container.name === "UNUSED" || container.name === "") return;
+    const key = `[${10 - row},${col + 1}]`;
     const isSelected = containersToBalance.some((item) => item.position === key);
 
     if (isSelected) {
@@ -82,19 +82,21 @@ function Balance(){
       <div key={`row-${rowIndex}`} className="grid-row">
         {row.map((cell, colIndex) => {
           let className;
-          if (cell.name === "NAN") {
+          if (cell.name === "") {
+            className = "grid-cell empty";
+          } else if (cell.name === "NAN") {
             className = "grid-cell nan";
           } else if (cell.name === "UNUSED") {
             className = "grid-cell unused";
           } else {
             className = containersToBalance.some(
-              (item) => item.position === `[${8 - rowIndex},${colIndex + 1}]`
+              (item) => item.position === `[${10 - rowIndex},${colIndex + 1}]`
             )
               ? "grid-cell used selected"
               : "grid-cell used";
           }
           
-          const position = `[${8 - rowIndex}, ${colIndex + 1}]`;
+          const position = `[${10 - rowIndex}, ${colIndex + 1}]`;
           // const displayWeight = cell.name === "UNUSED" ? "UNUSED" : `${cell.weight} kg`;
 
           return (
@@ -109,7 +111,7 @@ function Balance(){
                   col: colIndex,
                 })
               }
-              onMouseLeave={() => setHoveredContainer({ name: "", weight: "", row: 0, col: 0 })}
+              onMouseLeave={() => setHoveredContainer({ name: "none", weight: "", row: 0, col: 0 })}
               onClick={() => selectedContainer(rowIndex, colIndex, cell)}
             >
               <span className="cell-text">

@@ -77,6 +77,11 @@
       background-color: #323232;
       color: white;
   }
+
+  .grid-cell.empty {
+    background-color: #868585;
+    color: white;
+}
   
   .grid-cell.unused{
       background-color: #aba8a8;
