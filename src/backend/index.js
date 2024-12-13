@@ -10,6 +10,7 @@ const { parse_manifest, matrix_to_string} = require('../lib/manifest_parser.js')
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const { computeBalance } = require('../lib/balance.js');
 
 app.use(express.text());
 app.use(express.json());
@@ -48,7 +49,7 @@ app.post('/api/uploadManifest', function(req, res){
     currentManifest.contents = req.body.fileContents;
     res.send("OK");
     currentManifest.parsed = parse_manifest(currentManifest.contents);
-    console.log(currentManifest)
+    console.log(currentManifest.name)
 });
 
 
@@ -87,6 +88,19 @@ app.post('/api/computeLoad', function(req, res){
     console.log("Received computeLoad");
     const amount = req.body.amount;
     const steps = computeLoad(currentManifest.parsed, amount);
+    res.send(steps);
+});
+
+/*
+ Compute Balance steps on current manifest
+ Type: GET
+ Body: None
+*/
+app.get('/api/computeBalance', function(req, res){
+    console.log("Received computeBalance");
+    const final_state = computeBalance(currentManifest.parsed);
+    const steps = final_state.steps;
+    currentManifest.parsed = final_state.manifest_matrix
     res.send(steps);
 });
 
