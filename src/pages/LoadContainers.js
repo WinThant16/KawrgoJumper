@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/TaskSelection.css"; // Reuse styles
 import Navbar from "../components/Navbar.js";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { submitLog } from "../lib/requestLib";
 
 function LoadContainers() {
   const [totalContainers, setTotalContainers] = useState("");
@@ -38,23 +39,40 @@ function LoadContainers() {
       ...loadedContainers,
       { ...currentContainer, id: loadedContainers.length + 1 },
     ]);
+
+    //log loaded container
+    submitLog(`Container loaded: Name - "${currentContainer.name}", Weight - ${currentContainer.weight}kg.`);
     setCurrentContainer({ name: "", weight: "" });
 
     if (remainingContainers - 1 > 0) {
       setRemainingContainers(remainingContainers - 1);
     } else {
       alert("All containers have been successfully loaded!");
+      //log when all containers are loaded.
+      submitLog(`All containers (${totalContainers}) have been successfully loaded.`);
       navigate("/move-containers"); // Navigate to MoveContainersUnload page
     }
     setError("");
   };
 
   const handleDeleteContainer = (id) => {
+    const containerToDelete = loadedContainers.find(
+      (container) => container.id === id
+    );
+    
     const updatedContainers = loadedContainers.filter(
       (container) => container.id !== id
     );
     setLoadedContainers(updatedContainers);
     setRemainingContainers((prevCount) => prevCount + 1); // Increment remaining containers
+    
+    // Log the deleted container
+    if (containerToDelete) {
+      submitLog(
+        `Container deleted: Name - "${containerToDelete.name}", Weight - ${containerToDelete.weight}kg.`
+      );
+    }
+  
   };
 
   const resetForm = () => {
