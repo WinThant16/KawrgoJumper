@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Balance(){
   const [gridData, setGridData] = useState([]);
   const [containersToBalance, setContainersToBalance] = useState([]);
-  const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
+  const [hoveredContainer, setHoveredContainer] = useState({ name: "storage", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
   const navigate = useNavigate();
