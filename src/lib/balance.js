@@ -204,6 +204,8 @@ function computeBalance(manifest_matrix) {
   return false;
 }
 
+module.exports = {computeBalance}
+
 
 //const manifest_text = readFileSync("./SilverQueen.txt", { encoding: "utf-8" });
 //const { parse_manifest, container } = require("./manifest_parser");
