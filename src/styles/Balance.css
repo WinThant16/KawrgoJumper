@@ -13,7 +13,6 @@
 
   .balance-page-left {
     display: flex;
-    left: 0;
     flex-direction: column;
     align-items: left;
     justify-content: center;
@@ -24,7 +23,8 @@
 
   .balance-page-right {
     display: flex;
-    flex-direction: column;
+    gap: 10px;
+    flex-direction: row;
     align-items: right;
     justify-content: center;
     background-color: #f9f9f9;

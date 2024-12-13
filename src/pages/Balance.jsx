@@ -116,7 +116,7 @@ function Balance(){
                 {cell.name === "NAN" ? "NAN" : (
                   <>
                     {position}<br />
-                    {cell.weight}kg
+                    {cell.weight}
                   </>
               )}
               </span>
@@ -155,17 +155,20 @@ function Balance(){
             <p><strong>ETA:</strong></p>
             <p>{etaTime}</p>
           </div>
-          <div className="balance-page-right">
+
+          {/* <div className="balance-page-right">
             <button className="begin-button" onClick={beginProcess}>Begin</button>
-          </div>
+          </div> */}
         </div>
         <div className="lower-info-section">
           <div className="info-box">
             <p><strong>Current Task: </strong></p>
             <p>{currentTask}</p>
           </div>
-          <button  className="next-button" onClick={beginProcess}>Next Step</button>
-          <button className="showBuffer-button" onClick={bufferPage}>Show Buffer</button>
+          <div className="balance-page-right">
+            <button  className="next-button" onClick={beginProcess}>Next Step</button>
+            <button className="showBuffer-button" onClick={bufferPage}>Show Buffer</button>
+          </div>
         </div>
       </div>
       <div className="content-container">
