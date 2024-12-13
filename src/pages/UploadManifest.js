@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar.js';
 import '../styles/UploadManifest.css';
+import {uploadManifest } from '../lib/requestLib.js';
 
 function UploadManifest() {
 	// state to store selected file
@@ -37,6 +38,7 @@ function UploadManifest() {
 			selectedFile.text().then((text) => {
 				setFileContent(text);											//save file content state
 				localStorage.setItem('manifestFileContent', text);		//save file content to local storage
+				uploadManifest(selectedFile.name, text)
 				localStorage.setItem('manifestSettled', true);   //mark as settled in localStorage
 				
 			});

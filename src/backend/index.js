@@ -6,7 +6,11 @@ const lfh = require("../lib/logfile.js");
 const log_file_handler = new lfh.logFileHandler()
 
 const {computeUnload, computeLoad} = require("../lib/loadUnload.js");
-const { parse_manifest } = require('../lib/manifest_parser.js');
+const { parse_manifest, matrix_to_string} = require('../lib/manifest_parser.js');
+const path = require("path");
+const fs = require("fs");
+const os = require("os");
+const { computeBalance } = require('../lib/balance.js');
 
 app.use(express.text());
 app.use(express.json());
@@ -44,7 +48,7 @@ app.post('/api/uploadManifest', function(req, res){
     currentManifest.contents = req.body.fileContents;
     res.send("OK");
     currentManifest.parsed = parse_manifest(currentManifest.contents);
-    console.log(currentManifest)
+    console.log(currentManifest.name)
 });
 
 
@@ -55,9 +59,10 @@ app.post('/api/uploadManifest', function(req, res){
 */
 app.get('/api/getCurrentManifest', function(req, res){
     console.log("Received getCurrentManifest");
+    currentManifest.contents = matrix_to_string(currentManifest.parsed)
     res.send({
-        "name":currentManifest.name,
-        "contents": currentManifest.contents
+        "fileName":currentManifest.name,
+        "fileContents": currentManifest.contents
     });
 });
 
@@ -85,6 +90,58 @@ app.post('/api/computeLoad', function(req, res){
     res.send(steps);
 });
 
+/*
+ Compute Balance steps on current manifest
+ Type: GET
+ Body: None
+*/
+app.get('/api/computeBalance', function(req, res){
+    console.log("Received computeBalance");
+    const final_state = computeBalance(currentManifest.parsed);
+    const steps = final_state.steps;
+    currentManifest.parsed = final_state.manifest_matrix
+    res.send(steps);
+});
+
+/*
+ Save Manifest to Desktop
+ Type: POST
+ Body: JSON payload: {fileName:"keogh.txt". fileContents:""} or NOTHING (like nothing nothing)
+ Response: saved file path
+*/
+app.post('/api/saveManifest', function(req, res){
+    console.log("Received saveManifest");
+    if(req.body && req.body.fileName && req.body.fileContents){
+        console.log("Received updated manifest.")
+        currentManifest.name = req.body.fileName;
+        currentManifest.contents = req.body.fileContents;
+        currentManifest.parsed = parse_manifest(currentManifest.contents);
+        console.log(currentManifest)
+    }else{
+        console.log("Did not receive updated manifest, saving stored.")
+    }
+    let SavePath = path.join(os.homedir(), "Desktop", currentManifest.name.replace(/\.txt$/m,"OUTBOUND.txt"));
+    let nonce = 0;
+
+    // dont overwrite if file already exists
+    if(fs.existsSync(SavePath)){
+        while (fs.existsSync(SavePath.replace(/\.txt$/m,`_${nonce}.txt`))){ // while the file exists
+            nonce += 1;
+        }
+        SavePath = SavePath.replace(/\.txt$/m,`_${nonce}.txt`)
+    }
+
+    console.log("Saving manifest to", SavePath);
+
+    // update file contents with parsed manifest
+    currentManifest.contents = matrix_to_string(currentManifest.parsed);
+
+    // save file contents
+    fs.writeFileSync(SavePath, currentManifest.contents);
+
+    res.send(SavePath);
+});
+
 app.get('*', (req, res) => {                       
-    res.sendFile(require("path").resolve('./build', 'index.html'));                               
+    res.sendFile(path.resolve('./build', 'index.html'));                               
   });
