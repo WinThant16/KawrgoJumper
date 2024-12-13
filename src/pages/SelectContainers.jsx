@@ -70,7 +70,7 @@ function SelectContainers(){
 
   const beginProcess = () =>{
     submitLog("Done Selecting Containers to Unload.");
-    navigate("/move-containers");
+    navigate("/load-containers");
   }
 
   const truncateText = (text, maxLength) => {
