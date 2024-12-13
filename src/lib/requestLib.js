@@ -57,9 +57,17 @@ async function saveManifest(name=undefined, contents =undefined){
   return res.data; // res.data should be the file path
 }
 
-const reqLib = {submitLog, uploadManifest, getCurrentManifest, computeUnload, computeLoad, saveManifest}
+// promise, must use .then((manifest)=>{}) or await
+// return steps to balance ship
+async function computeBalance(){
+  const res = await axios.get(`${HOST}/api/computeBalance`);
+  const steps = res.data;
+  return steps;
+}
 
-export {submitLog, uploadManifest, getCurrentManifest, computeUnload, computeLoad, saveManifest};
+const reqLib = {submitLog, uploadManifest, getCurrentManifest, computeUnload, computeLoad, saveManifest, computeBalance}
+
+export {submitLog, uploadManifest, getCurrentManifest, computeUnload, computeLoad, saveManifest, computeBalance};
 export default reqLib;
 
 //computeUnload([[0,1]]).then((steps)=>{console.log(steps)});
