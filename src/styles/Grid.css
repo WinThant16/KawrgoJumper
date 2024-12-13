@@ -4,6 +4,7 @@
     margin: 20px auto;
     width: 100%;
     max-width: 1080px;
+    margin-top: 30px;
 }
 
 .grid-row{
@@ -98,5 +99,11 @@
 .grid-cell.path {
     background-color: blue;
     color: white;
+}
+  
+
+.grid-cell.temporary {
+    background-color: #d3d3d3; /* Light grey for temporary rows */
+    color: black; /* Ensure text is visible */
 }
   

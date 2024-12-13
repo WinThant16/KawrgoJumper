@@ -1,7 +1,7 @@
 .move-containers-page {
-	padding-top: 100px; /* Adjust this based on Navbar height */
+	padding-top: 80px; /* Adjust according to your navbar height */
 }
-
+  
 .controls {
 	margin-top: 20px;
 	display: flex;

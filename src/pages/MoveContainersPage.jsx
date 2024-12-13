@@ -5,19 +5,16 @@ import { computeUnload } from "../lib/requestLib";
 import "../styles/MoveContainers.css";
 
 function MoveContainersPage() {
-  const [manifest, setManifest] = useState([]);
+  const [manifest, setManifest] = useState("");
   const [steps, setSteps] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(-1);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const manifestResponse = await fetch("/api/getCurrentManifest").then((res) =>
-          res.json()
-        );
-        const manifestContent = manifestResponse.fileContents;
-
-        setManifest(manifestContent);
+        const manifestResponse = await fetch("/api/getCurrentManifest");
+        const { fileContents } = await manifestResponse.json();
+        setManifest(fileContents);
 
         const unloadSteps = await computeUnload([[7, 1]]);
         setSteps(unloadSteps);
@@ -41,24 +38,18 @@ function MoveContainersPage() {
     }
   };
 
-  const getHighlightedCells = () => {
-    if (currentStepIndex === -1 || steps.length === 0) return {};
-
-    const { source, destination, path } = steps[currentStepIndex];
-
-    return {
-      source,
-      destination: destination !== "TRUCK" ? destination : null,
-      path,
-    };
-  };
-
-  const highlightedCells = getHighlightedCells();
-
   return (
     <div>
       <Navbar />
-      <GridMovement manifestContent={manifest} highlightedCells={highlightedCells} />
+      <div className="info-section">
+        <h3>Move Containers</h3>
+        <p>Step {currentStepIndex + 1} of {steps.length}</p>
+      </div>
+      <GridMovement
+        manifestContent={manifest}
+        steps={steps}
+        currentStepIndex={currentStepIndex}
+      />
       <div className="controls">
         <button onClick={handlePreviousStep} disabled={currentStepIndex <= 0}>
           Previous Step
