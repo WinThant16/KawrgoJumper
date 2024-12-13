@@ -92,7 +92,7 @@
 .info-section {
     display: flex;
     margin-top: 60px;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     background-color: #f8f9fa;
     padding: 10px 20px;
