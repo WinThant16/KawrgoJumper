@@ -193,6 +193,8 @@ function computeBalance(manifest_matrix) {
             if (weightsBalanced(weights)) {
               // if this is a solution return it
               console.log(iterations);
+              state_clone.manifest_matrix.pop()
+              state_clone.manifest_matrix.pop() // remove rows 10 and 11 that we added
               return state_clone;
             }
             state_heap.push(state_clone);
