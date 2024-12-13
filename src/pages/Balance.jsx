@@ -12,6 +12,11 @@ function Balance(){
   const jobType = localStorage.getItem("jobType");
   const navigate = useNavigate();
 
+  //######TODO#######
+  //replace these constants with ETA and Current task from alg
+  const etaTime = "20min";
+  const currentTask = "Move Container A from [x, y] to [x, y]";
+
   const loadManifest = () => {
     const manifest = localStorage.getItem("manifestFileContent");
 
@@ -90,6 +95,7 @@ function Balance(){
           }
           
           const position = `[${8 - rowIndex}, ${colIndex + 1}]`;
+          // const displayWeight = cell.name === "UNUSED" ? "UNUSED" : `${cell.weight} kg`;
 
           return (
             <div
@@ -110,10 +116,11 @@ function Balance(){
                 {cell.name === "NAN" ? "NAN" : (
                   <>
                     {position}<br />
-                    {cell.weight}
+                    {cell.weight}kg
                   </>
               )}
               </span>
+              {/* <span className="cell-weight">{displayWeight}</span> */}
 
               { hoveredContainer.name === cell.name &&
                 hoveredContainer.row === rowIndex &&
@@ -133,25 +140,37 @@ function Balance(){
   return (
     <div className="balance-page">
       <Navbar />
-      <div className="info-section">
-        <div className="info-box">
-          <p><strong>Current File: </strong></p>
-          <p>{currentFile}</p>
+    
+      <div className="balance-page-left">
+        <div className="info-section">
+          <div className="info-box">
+            <p><strong>Current File: </strong></p>
+            <p>{currentFile}</p>
+          </div>
+          <div className="info-box">
+            <p><strong>Job:</strong></p>
+            <p>{jobType}</p>
+          </div>
+          <div className="info-box">
+            <p><strong>ETA:</strong></p>
+            <p>{etaTime}</p>
+          </div>
+          <div className="balance-page-right">
+            <button className="begin-button" onClick={beginProcess}>Begin</button>
+          </div>
         </div>
-        <div className="info-box">
-          <p><strong>Job:</strong></p>
-          <p>{jobType}</p>
+        <div className="lower-info-section">
+          <div className="info-box">
+            <p><strong>Current Task: </strong></p>
+            <p>{currentTask}</p>
+          </div>
+          <button  className="next-button" onClick={beginProcess}>Next Step</button>
+          <button className="showBuffer-button" onClick={bufferPage}>Show Buffer</button>
         </div>
-        <button className="begin-button" onClick={beginProcess}>Begin</button>
-        <button className="next-button" onClick={beginProcess}>Next Step</button>
-        <button className="showBuffer-button" onClick={bufferPage}>Show Buffer</button>
-        {/* </div>
-        <button className="showBuffer" onClick={buffer}>Buffer</button> */}
       </div>
       <div className="content-container">
-        <h4>Please Select Containers to Balance</h4>
         <div className="grid-container">{displayGrid()}</div>
-      </div>
+      </div> 
     </div>
   );
 }
