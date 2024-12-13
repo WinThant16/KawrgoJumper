@@ -70,6 +70,7 @@ function SelectContainers(){
 
   const beginProcess = () =>{
     submitLog("Done Selecting Containers to Unload.");
+    submitLog("Selecting Containers to Load.");
     navigate("/load-containers");
   }
 
