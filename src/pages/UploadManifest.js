@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar.js';
 import '../styles/UploadManifest.css';
+import {uploadManifest, submitLog } from '../lib/requestLib.js';
 
 function UploadManifest() {
 	// state to store selected file
@@ -20,8 +21,9 @@ function UploadManifest() {
 		if (savedFileName && savedFileContent) {
 			setFileName(savedFileName); // Restore the saved file name
 			// setFile({ name: savedFileName, content: savedFileContent }); // Simulate a file object
-			setFileContent(savedFileContent);	//restor saved file content
+			setFileContent(savedFileContent);	//restore saved file content
 			setSettled(savedSettled);
+			submitLog (`Restored previous manifest file: ${savedFileName}.`);			//log restoring file name
 		}
 	}, []);
 
@@ -37,9 +39,12 @@ function UploadManifest() {
 			selectedFile.text().then((text) => {
 				setFileContent(text);											//save file content state
 				localStorage.setItem('manifestFileContent', text);		//save file content to local storage
+				uploadManifest(selectedFile.name, text)
 				localStorage.setItem('manifestSettled', true);   //mark as settled in localStorage
 				
 			});
+			const manifest_name= localStorage.getItem('manifestFileName');
+			submitLog (`Manifest file: ${manifest_name} is opened.`);			//log restoring file name
 			// e.target.value = ''; 		
 			// setFile(selectedFile);							//store selected file object
 			// localStorage.setItem('manifestFileName', selectedFile.name);	//save file name in local storage

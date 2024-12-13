@@ -3,11 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/Navbar.css';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/KawrgoJumperLogoNarrow.png';
+import { submitLog } from '../lib/requestLib';
 
 function Navbar({ onLogFile, onLogout}) {
 	const navigate = useNavigate();
 	const [showLogInput, setShowLogInput] = useState(false);  //state for showing log input box
-
+	const [logMessage, setLogMessage] = useState('');
 	/* handle log button click: 
 	toggles display of input box for adding to log file. 
 	###########TO DO ###############*/
@@ -22,6 +23,8 @@ function Navbar({ onLogFile, onLogout}) {
 		);
 		if (confirmLogout) {
 			alert ('You have been logged out.');
+			const uname = localStorage.getItem('username');		
+			submitLog (`${uname} signs out.`);
 			localStorage.removeItem('username');			//clear username?
 			navigate('/');							//redirect to home page(login)
 		}
@@ -40,6 +43,17 @@ function Navbar({ onLogFile, onLogout}) {
 			navigate('/upload-manifest'); //redirect to upload-manifest
 			
 		}
+	}
+	
+	const handleLogFile = () => {
+		if (logMessage.trim() === ''){
+			alert ('Please enter a valid log message.');				//prevent empty submissions.
+			return;
+		}
+		const username = localStorage.getItem('username');
+		submitLog (`User ${username} submitted a log note: "${logMessage.trim()}"`);		//submit log
+		setLogMessage('');							//clear text box
+		setShowLogInput(false)						//hide input box after submit
 	}
 
 	return (
@@ -84,8 +98,10 @@ function Navbar({ onLogFile, onLogout}) {
 				<div className='log-input-container'>
 					<textarea	className='log-input-box'
 								placeholder='Enter log message...'
+								value={logMessage}
+								onChange={(e) => setLogMessage(e.target.value)}			//update state with userinput
 					/>
-					<button className = "btn btn-primary mt-2" onClick={onLogFile}>
+					<button className = "btn btn-primary mt-2" onClick={handleLogFile}>
 						Submit Log
 					</button>
 				</div>

@@ -3,12 +3,15 @@ import logo from '../assets/KawrgoJumperShippingLogisticsLogo.png';
 import '../styles/Home.css';
 import { useNavigate } from 'react-router-dom';
 
+import { submitLog } from '../lib/requestLib';						//for logging user login
+
 function Home() {
 	const [username, setUsername] = useState('');
 	const navigate = useNavigate();
 
 	const handleLogin = () => {
 		if (username) {
+			submitLog(username + " signs in.");				//logs user sign in
 			localStorage.setItem('username', username);
 			//navigate to previous page, if set
 			if (localStorage.currentPage){

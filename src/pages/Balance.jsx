@@ -1,16 +1,21 @@
 import React, {useState, useEffect} from "react";
 import Navbar from "../components/Navbar";
-import "../styles/SelectContainers.css";
+import "../styles/Balance.css";
 import { useNavigate } from "react-router-dom";
-import { submitLog } from "../lib/requestLib";
 
-function SelectContainers(){
+/*testing branch*/
+function Balance(){
   const [gridData, setGridData] = useState([]);
-  const [selectedContainers, setSelectedContainers] = useState([]);
+  const [containersToBalance, setContainersToBalance] = useState([]);
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
   const navigate = useNavigate();
+
+  //######TODO#######
+  //replace these constants with ETA and Current task from alg
+  const etaTime = "20min";
+  const currentTask = "Move Container A from [x, y] to [x, y]";
 
   const loadManifest = () => {
     const manifest = localStorage.getItem("manifestFileContent");
@@ -55,30 +60,21 @@ function SelectContainers(){
   const selectedContainer = (row, col, container) => {
     if (container.name === "UNUSED" || container.name === "NAN") return;
     const key = `[${8 - row},${col + 1}]`;
-    const isSelected = selectedContainers.some((item) => item.position === key);
+    const isSelected = containersToBalance.some((item) => item.position === key);
 
-    const cont_name = container.name;
     if (isSelected) {
-      
-      setSelectedContainers(selectedContainers.filter((item) => item.position !== key));
-      submitLog (`Container '${cont_name}' at position [${8-row},${col+1}] is deselected.`);
+      setContainersToBalance(containersToBalance.filter((item) => item.position !== key));
     } else {
-      setSelectedContainers([...selectedContainers, { position: key, name: container.name, weight: container.weight }]);
-      submitLog (`Container '${cont_name}' at position [${8-row},${col+1}] is selected.`);
+      setContainersToBalance([...containersToBalance, { position: key, name: container.name, weight: container.weight }]);
     }
   };
 
   const beginProcess = () =>{
-    submitLog("Done Selecting Containers to Unload.");
-    submitLog("Selecting Containers to Load.");
-    navigate("/load-containers");
+    navigate("/move-containers");
   }
 
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
+  const bufferPage = () => {
+    navigate("/buffer");
   }
 
   const displayGrid = () => {
@@ -91,14 +87,15 @@ function SelectContainers(){
           } else if (cell.name === "UNUSED") {
             className = "grid-cell unused";
           } else {
-            className = selectedContainers.some(
+            className = containersToBalance.some(
               (item) => item.position === `[${8 - rowIndex},${colIndex + 1}]`
             )
               ? "grid-cell used selected"
               : "grid-cell used";
           }
           
-          const truncatedName = truncateText(cell.name, 8);      //max length set to 12.
+          const position = `[${8 - rowIndex}, ${colIndex + 1}]`;
+          // const displayWeight = cell.name === "UNUSED" ? "UNUSED" : `${cell.weight} kg`;
 
           return (
             <div
@@ -115,13 +112,21 @@ function SelectContainers(){
               onMouseLeave={() => setHoveredContainer({ name: "", weight: "", row: 0, col: 0 })}
               onClick={() => selectedContainer(rowIndex, colIndex, cell)}
             >
-              <span className="cell-text">{truncatedName}</span>
-              {/* {cell.name !== "NAN" ? cell.name.split(" ")[0] : ""} */}
-              {hoveredContainer.name === cell.name &&
+              <span className="cell-text">
+                {cell.name === "NAN" ? "NAN" : (
+                  <>
+                    {position}<br />
+                    {cell.weight}kg
+                  </>
+              )}
+              </span>
+              {/* <span className="cell-weight">{displayWeight}</span> */}
+
+              { hoveredContainer.name === cell.name &&
                 hoveredContainer.row === rowIndex &&
                 hoveredContainer.col === colIndex && (
                   <div className="hover-popup">
-                    <p>{`Name: ${cell.name}`}</p>
+                    { <p>{`Name: ${cell.name}`}</p> }
                     <p>{`Weight: ${cell.weight}kg`}</p>
                   </div>
                 )}
@@ -133,25 +138,41 @@ function SelectContainers(){
   };
 
   return (
-    <div className="select-containers-page">
+    <div className="balance-page">
       <Navbar />
-      <div className="info-section">
-        <div className="info-box">
-          <span className="info-label"><strong>Current File: </strong></span>
-          <span className="info-value">{currentFile}</span>
+    
+      <div className="balance-page-left">
+        <div className="info-section">
+          <div className="info-box">
+            <p><strong>Current File: </strong></p>
+            <p>{currentFile}</p>
+          </div>
+          <div className="info-box">
+            <p><strong>Job:</strong></p>
+            <p>{jobType}</p>
+          </div>
+          <div className="info-box">
+            <p><strong>ETA:</strong></p>
+            <p>{etaTime}</p>
+          </div>
+          <div className="balance-page-right">
+            <button className="begin-button" onClick={beginProcess}>Begin</button>
+          </div>
         </div>
-        <div className="info-box">
-          <span className="info-label"><strong>Job:</strong></span>
-          <span className="info-value">{jobType}</span>
+        <div className="lower-info-section">
+          <div className="info-box">
+            <p><strong>Current Task: </strong></p>
+            <p>{currentTask}</p>
+          </div>
+          <button  className="next-button" onClick={beginProcess}>Next Step</button>
+          <button className="showBuffer-button" onClick={bufferPage}>Show Buffer</button>
         </div>
-        <button className="begin-button" onClick={beginProcess}>Begin</button>
       </div>
       <div className="content-container">
-        <h4>Please Select Containers to Unload</h4>
         <div className="grid-container">{displayGrid()}</div>
-      </div>
+      </div> 
     </div>
   );
 }
 
-export default SelectContainers;
+export default Balance;
