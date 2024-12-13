@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/TaskSelection.css"; // Reuse styles
 import Navbar from "../components/Navbar.js";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function LoadContainers() {
   const [totalContainers, setTotalContainers] = useState("");
@@ -11,6 +12,8 @@ function LoadContainers() {
   });
   const [loadedContainers, setLoadedContainers] = useState([]);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate(); // Initialize navigation
 
   const startLoading = () => {
     if (!totalContainers || totalContainers <= 0) {
@@ -41,7 +44,7 @@ function LoadContainers() {
       setRemainingContainers(remainingContainers - 1);
     } else {
       alert("All containers have been successfully loaded!");
-      resetForm();
+      navigate("/move-containers"); // Navigate to MoveContainersUnload page
     }
     setError("");
   };
