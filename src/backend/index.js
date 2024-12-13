@@ -17,6 +17,7 @@ app.use(express.json());
 
 app.use(express.static('./build'));
 
+
 class manifest{
     name;
     contents;
