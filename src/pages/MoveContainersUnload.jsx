@@ -95,7 +95,12 @@ function MoveContainersUnload(){
           </span>
           <span className="info-value">{jobType}</span>
         </div>
-        
+        <div className="info-box">
+          <span className="info-label">
+            <strong>ETA:</strong>
+          </span>
+          <span className="info-value">{2121}</span>
+        </div>
         <button className="begin-button" onClick={nextStep}>
           Next
         </button>
