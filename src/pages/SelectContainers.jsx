@@ -6,7 +6,7 @@ import { submitLog } from "../lib/requestLib";
 
 function SelectContainers(){
   const [gridData, setGridData] = useState([]);
-  const [selectedContainers, setSelectedContainers] = useState([]);
+  const [selected_containers, setSelectedContainers] = useState([]);
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
@@ -54,16 +54,17 @@ function SelectContainers(){
 
   const selectedContainer = (row, col, container) => {
     if (container.name === "UNUSED" || container.name === "NAN") return;
-    const key = `[${8 - row},${col + 1}]`;
-    const isSelected = selectedContainers.some((item) => item.position === key);
+    const key = [8 - row,col + 1];
+    const isSelected = selected_containers.some((position) =>{return position[0] === key[0] && position[1] === key[1]});
 
     const cont_name = container.name;
     if (isSelected) {
-      
-      setSelectedContainers(selectedContainers.filter((item) => item.position !== key));
+      setSelectedContainers(selected_containers.filter((item)=> item[0] !== key[0] && item[1] !== key[1] ));
+      //setSelectedContainers(selectedContainers.filter((item) => item.position !== key));
       submitLog (`Container '${cont_name}' at position [${8-row},${col+1}] is deselected.`);
     } else {
-      setSelectedContainers([...selectedContainers, { position: key, name: container.name, weight: container.weight }]);
+      setSelectedContainers([...selected_containers, key]);
+      //setSelectedContainers([...selectedContainers, { position: key, name: container.name, weight: container.weight }]);
       submitLog (`Container '${cont_name}' at position [${8-row},${col+1}] is selected.`);
     }
   };
@@ -71,6 +72,11 @@ function SelectContainers(){
   const beginProcess = () =>{
     submitLog("Done Selecting Containers to Unload.");
     submitLog("Selecting Containers to Load.");
+    const zero_indexed_selected_containers = []; // it really shoudlve been 0indexed in the first place
+    for(let i = 0; i<selected_containers.length; i++){
+      zero_indexed_selected_containers.push([selected_containers[0]-1, selected_containers[1]-1]);
+    }
+    localStorage.setItem("selected_containers", zero_indexed_selected_containers);
     navigate("/load-containers");
   }
 
@@ -91,9 +97,9 @@ function SelectContainers(){
           } else if (cell.name === "UNUSED") {
             className = "grid-cell unused";
           } else {
-            className = selectedContainers.some(
-              (item) => item.position === `[${8 - rowIndex},${colIndex + 1}]`
-            )
+            console.log(selected_containers);
+            console.log("ternary", selected_containers.some((position) =>{return position[0] === 8-rowIndex && position[1] === colIndex+1}))
+            className = selected_containers.some((position) =>{return position[0] === 8-rowIndex && position[1] === colIndex+1})
               ? "grid-cell used selected"
               : "grid-cell used";
           }
