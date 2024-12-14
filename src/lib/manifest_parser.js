@@ -66,8 +66,11 @@ function matrix_to_string(manifest_matrix){
     const str = []
     for(let i=0; i<manifest_matrix.length; i++){
         for(let j=0; j<manifest_matrix[0].length; j++){ 
-        const col = `[${manifest_matrix[i][j].row},${manifest_matrix[i][j].col}], {${manifest_matrix[i][j].weight}}, ${manifest_matrix[i][j].name}`
-        str.push(col);
+            while(manifest_matrix[i][j].weight.length !==5){
+                manifest_matrix[i][j].weight = "0" + manifest_matrix[i][j].weight;
+            }
+            const col = `[${manifest_matrix[i][j].row},${manifest_matrix[i][j].col}], {${manifest_matrix[i][j].weight}}, ${manifest_matrix[i][j].name}`
+            str.push(col);
         }
     }
     return str.join("\n");
