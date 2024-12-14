@@ -1,9 +1,10 @@
 .grid-container{
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    margin: 20px auto;
+    margin: 3vh auto;
     width: 100%;
     max-width: 1080px;
+    height: 69vh;
 }
 
 .grid-row{
@@ -18,8 +19,8 @@
     font-size: 15px;
     background-color: rgb(206, 203, 203);
     text-align: center;
-    height: 60px;
-    width: 90px;
+    height: 95%;
+    width: 95%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
