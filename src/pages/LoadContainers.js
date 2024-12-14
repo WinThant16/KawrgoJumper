@@ -16,6 +16,8 @@ function LoadContainers() {
 
   const navigate = useNavigate(); // Initialize navigation
 
+  localStorage.setItem('currentPage', 'load-containers');
+
   const startLoading = () => {
     if (!totalContainers || totalContainers <= 0) {
       if (

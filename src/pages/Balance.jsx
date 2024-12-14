@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Grid from "../components/Grid";
 import { useNavigate } from "react-router-dom";
-import { computeLoad, submitLog } from "../lib/requestLib";
+import { computeLoad, submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
 import { shallow_extended_matrix } from "../lib/taskcommon";
@@ -16,6 +16,13 @@ function Balance(){
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
+  
+  localStorage.setItem('currentPage', 'balance');
+
+  const saved_stepi = Number(localStorage.getItem("balance-stepi"));
+  if(saved_stepi !== stepi && saved_stepi !== null){
+    setStep(saved_stepi);
+  }
   
   let manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
   let manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
@@ -82,6 +89,7 @@ function Balance(){
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
     if(stepi < steps.length-1){
+      localStorage.setItem("balance-stepi", stepi+1);
       setStep(stepi+1);
       processStep();
     }else{
@@ -90,9 +98,10 @@ function Balance(){
   };
   
   const finish = async ()=>{
-    // prepare load steps
+    uploadManifest(localStorage.getItem("manifestFileName"), localStorage.getItem("manifestFileContent"));
     navigate("/summary");
   }
+
   if(stepi >= steps.length){
     finish();
   }else{

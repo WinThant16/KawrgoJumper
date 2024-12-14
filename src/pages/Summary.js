@@ -7,6 +7,9 @@ import { submitLog,saveManifest } from "../lib/requestLib.js";
 function Summary() {
   const navigate = useNavigate();
   const [saved_path, setSavedPath] = useState("");
+
+  localStorage.setItem('currentPage', 'summary');		//update current page in local storage
+
     let saved_path_storage = localStorage.getItem("saved_path");
     if(!saved_path_storage){
         const name = localStorage.getItem("manifestFileName");

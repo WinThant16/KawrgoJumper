@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Grid from "../components/Grid";
 import { useNavigate } from "react-router-dom";
-import { computeLoad, submitLog } from "../lib/requestLib";
+import { computeLoad, submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
 import { shallow_extended_matrix } from "../lib/taskcommon";
@@ -14,6 +14,14 @@ function MoveContainersUnload(){
   //const [manifest_matrix, setManifest] = useState({});
   //const [manifest_name, setManifestName] = useState("");
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
+
+  localStorage.setItem('currentPage', 'move-containers-unload');		//update current page in local storage
+
+  const saved_stepi = Number(localStorage.getItem("unload-stepi"));
+  if(saved_stepi !== stepi && saved_stepi !== null){
+    setStep(saved_stepi);
+  }
+
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
   
@@ -82,6 +90,7 @@ function MoveContainersUnload(){
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
     if(stepi < steps.length-1){
+      localStorage.setItem("unload-stepi", stepi+1);
       setStep(stepi+1);
       processStep();
     }else{
@@ -92,6 +101,7 @@ function MoveContainersUnload(){
   const finish = async ()=>{
     // prepare load steps
     const containers_to_load = localStorage.getItem("containers_to_load");
+    uploadManifest(localStorage.getItem("manifestFileName"), localStorage.getItem("manifestFileContent"));
     if(containers_to_load && containers_to_load.length > 0){
       const num_containers_to_load = JSON.parse(containers_to_load).length;
       console.log(manifest_matrix_noextend);

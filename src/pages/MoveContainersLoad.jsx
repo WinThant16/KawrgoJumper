@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Grid from "../components/Grid";
 import { useNavigate } from "react-router-dom";
-import { submitLog } from "../lib/requestLib";
+import { submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { container, matrix_to_string, parse_manifest } from "../lib/manifest_parser";
 import { shallow_extended_matrix } from "../lib/taskcommon";
@@ -11,6 +11,14 @@ function MoveContainersLoad(){
   const [stepi, setStep] = useState(0);
   //const [manifest_matrix, setManifest] = useState({});
   //const [manifest_name, setManifestName] = useState("");
+
+  localStorage.setItem('currentPage', 'move-containers-load');
+
+  const saved_stepi = Number(localStorage.getItem("load-stepi"));
+  if(saved_stepi !== stepi && saved_stepi !== null){
+    setStep(saved_stepi);
+  }
+
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
@@ -64,9 +72,11 @@ function MoveContainersLoad(){
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent",matrix_to_string(manifest_matrix_noextend))
     if(stepi < steps.length-1){
+      localStorage.setItem("load-stepi", stepi+1);
       setStep(stepi+1);
       processStep();
     }else{
+      uploadManifest(localStorage.getItem("manifestFileName"), localStorage.getItem("manifestFileContent"));
       navigate("/summary");
     }
   };

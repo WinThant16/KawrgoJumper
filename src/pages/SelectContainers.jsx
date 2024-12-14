@@ -10,6 +10,9 @@ function SelectContainers(){
   const [gridData, setGridData] = useState([]);
   const [selected_containers, setSelectedContainers] = useState([]);
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
+
+  localStorage.setItem('currentPage', 'select-containers');		//update current page in local storage
+
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
   const manifest_matrix =  parse_manifest(localStorage.getItem("manifestFileContent"));
@@ -41,7 +44,7 @@ function SelectContainers(){
     //for(let i = 0; i<selected_containers.length; i++){
     //  zero_indexed_selected_containers.push([selected_containers[i][0]-1, selected_containers[i][1]-1]);
     //}
-    console.log("containers to move", selected_containers)
+    //console.log("containers to move", selected_containers)
 
     localStorage.setItem("selected_containers", JSON.stringify(selected_containers));
     const steps = await computeUnload(selected_containers);
