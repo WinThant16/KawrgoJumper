@@ -25,6 +25,8 @@ function MoveContainersUnload(){
   }
   const navigate = useNavigate();
 
+  let destination_label = "TRUCK";
+
   let destination_container;// = [steps[0].path[steps[0].path.length-1]];
   let start_container;// = [steps[0].source];
   let path_containers;// = steps[0].path;
@@ -38,6 +40,7 @@ function MoveContainersUnload(){
   //console.log([steps[0].path[steps[0].path.length-1]])
   console.log("steps", steps);
   console.log("outside processstep", stepi)
+
   const processStep = () =>{
     console.log("inside processstep", stepi)
     console.log("AAA", steps[stepi])
@@ -46,6 +49,11 @@ function MoveContainersUnload(){
     destination_container = [steps[stepi].path[steps[stepi].path.length-1]]
     start_container = [steps[stepi].source];
     path_containers = steps[stepi].path;
+    if(steps[stepi].destination === "TRUCK"){
+      destination_label = "TRUCK";
+    }else{
+      destination_label = `[${steps[stepi].destination[0]},${steps[stepi].destination[1]}]`
+    }
   }
 
   const nextStep = () => {
@@ -93,7 +101,12 @@ function MoveContainersUnload(){
         </button>
       </div>
       <div className="content-container">
-        <h4>Please Select Containers to Unload</h4>
+      <div className="info-box">
+          <span className="info-label">
+          <strong>Current Task: </strong>
+            <bold>Move container at {`[${steps[stepi].source[0]},${steps[stepi].source[1]}]`} ({manifest_matrix[steps[stepi].source[0]][steps[stepi].source[1]].name}) to {destination_label}</bold>
+          </span>
+        </div>
         <Grid
           manifest_matrix={manifest_matrix} // Pass manifest content
           onCellClick={()=>{}}
