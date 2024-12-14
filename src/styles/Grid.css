@@ -48,6 +48,23 @@
     font-weight: bold;
 }
 
+.grid-cell.destination{
+    background-color: #ff0000;
+    color: white;
+    font-weight: bold;
+}
+.grid-cell.source{
+    background-color: #00ff37;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.grid-cell.path{
+    background-color: #d9ff00;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
 .grid-cell.used.selected {
     background-color: #28a745; 
   }
