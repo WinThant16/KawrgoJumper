@@ -6,6 +6,7 @@ const {
   displayGraph,
   step,
   bfs,
+  deepCopyManifest,
 } = require("./taskcommon");
 
 const { Heap } = require("heap-js");
@@ -61,18 +62,6 @@ function containersByWeight(manifest_matrix) {
   return containers;
 }
 
-
-function deepCopyManifest(manifest_matrix) {
-  const copy = [];
-  for (let i = 0; i < manifest_matrix.length; i++) {
-    const row = [];
-    for (let j = 0; j < manifest_matrix[0].length; j++) {
-      row.push(manifest_matrix[i][j].clone());
-    }
-    copy.push(row);
-  }
-  return copy;
-}
 
 function shallowCopyArray(arr) {
   const copy = [];

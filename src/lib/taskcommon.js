@@ -208,4 +208,17 @@ function containersInTemp(manifest_matrix, tempRows){
     return containers;
 }
 
-module.exports = {node, step, shallow_extended_matrix, getFirstEmptyRowInCol, validPosition, bfs, findClosestUnusedBFS, displayGraph, containersInTemp, sortContainersLeftHigh}
+function deepCopyManifest(manifest_matrix) {
+    const copy = [];
+    for (let i = 0; i < manifest_matrix.length; i++) {
+      const row = [];
+      for (let j = 0; j < manifest_matrix[0].length; j++) {
+        row.push(manifest_matrix[i][j].clone());
+      }
+      copy.push(row);
+    }
+    return copy;
+}
+
+
+module.exports = {node, step, shallow_extended_matrix, getFirstEmptyRowInCol, validPosition, bfs, findClosestUnusedBFS, displayGraph, containersInTemp, sortContainersLeftHigh, deepCopyManifest}
