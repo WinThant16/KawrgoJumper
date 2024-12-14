@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Grid from "../components/Grid";
 import { useNavigate } from "react-router-dom";
-import { submitLog } from "../lib/requestLib";
+import { computeLoad, submitLog } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
-import { parse_manifest } from "../lib/manifest_parser";
+import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
 import { shallow_extended_matrix } from "../lib/taskcommon";
 
 let manifest_matrix;
+let manifest_matrix_noextend;
 let manifest_name = "";
 
 function MoveContainersUnload(){
@@ -19,7 +20,8 @@ function MoveContainersUnload(){
   const jobType = localStorage.getItem("jobType");
   if(manifest_name !== localStorage.getItem("manifestFileName")){
     manifest_name = localStorage.getItem("manifestFileName");
-    manifest_matrix = shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), []));
+    manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+    manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
     //setManifestName(localStorage.getItem("manifestFileName"));
     //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
   }
@@ -42,10 +44,10 @@ function MoveContainersUnload(){
   console.log("outside processstep", stepi)
 
   const processStep = () =>{
-    console.log("inside processstep", stepi)
-    console.log("AAA", steps[stepi])
-    console.log("BBB", steps[stepi].path, steps[stepi].path.length-1)
-    console.log("CCC", [steps[stepi].path[steps[stepi].path.length-1]])
+    // console.log("inside processstep", stepi)
+    // console.log("AAA", steps[stepi])
+    // console.log("BBB", steps[stepi].path, steps[stepi].path.length-1)
+    // console.log("CCC", [steps[stepi].path[steps[stepi].path.length-1]])
     destination_container = [steps[stepi].path[steps[stepi].path.length-1]]
     start_container = [steps[stepi].source];
     path_containers = steps[stepi].path;
@@ -56,7 +58,7 @@ function MoveContainersUnload(){
     }
   }
 
-  const nextStep = () => {
+  const nextStep = async () => {
     const destination = steps[stepi].path[steps[stepi].path.length-1];
     const source = steps[stepi].source
     const dest_container = manifest_matrix[destination[0]][destination[1]];
@@ -72,9 +74,20 @@ function MoveContainersUnload(){
       console.log("swapped ", dest_container, src_container)
     }
     //setManifest(manifest_matrix);
-    setStep(stepi+1);
-    processStep();
-    //navigate("/");
+    if(stepi === steps.length-1){
+      // prepare load steps
+      const num_containers_to_load = JSON.parse(localStorage.getItem("containers_to_load")).length;
+      console.log(manifest_matrix_noextend);
+      localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
+      console.log(localStorage.getItem("manifestFileContent"));
+      const load_steps = await computeLoad(num_containers_to_load);
+      console.log("load steps",load_steps)
+      localStorage.setItem("load_steps", JSON.stringify(load_steps));
+      navigate("/move-containers-load");
+    }else{
+      setStep(stepi+1);
+      processStep();
+    }
   };
 
   processStep();

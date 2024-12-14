@@ -18,13 +18,13 @@ class container{
         //console.log("swapping ", containerToSwapWith)
         const containerClone = containerToSwapWith.clone();
         //console.log("clone", containerClone);
-        containerToSwapWith.row = this.row;
-        containerToSwapWith.col = this.col;
+        //containerToSwapWith.row = this.row;
+        //containerToSwapWith.col = this.col;
         containerToSwapWith.weight = this.weight;
         containerToSwapWith.name = this.name;
 
-        this.row = containerClone.row;
-        this.col = containerClone.col;
+        //this.row = containerClone.row;
+        //this.col = containerClone.col;
         this.weight = containerClone.weight;
         this.name = containerClone.name;
         //console.log("post this ", this);

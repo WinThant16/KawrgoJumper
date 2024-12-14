@@ -25,7 +25,7 @@ function LoadContainers() {
       ) {
         setRemainingContainers(0); // Move forward with 0 containers
         setError("");
-        navigate("/move-containers"); // Navigate to the next step
+        navigate("/move-containers-unload"); // Navigate to the next step
       } else {
         setTotalContainers(""); // Reset the form
         setError("");
@@ -50,7 +50,11 @@ function LoadContainers() {
       ...loadedContainers,
       { ...currentContainer, id: loadedContainers.length + 1 },
     ]);
-
+    const loaded_containers_state_bypass = [
+      ...loadedContainers,
+      { ...currentContainer, id: loadedContainers.length + 1 },
+    ];
+    // console.log("loaded containers", loaded_containers_state_bypass)
     // Log loaded container
     submitLog(
       `Container loaded: Name - "${currentContainer.name}", Weight - ${currentContainer.weight}kg.`
@@ -68,7 +72,8 @@ function LoadContainers() {
         submitLog(
           `All containers (${totalContainers}) have been successfully loaded.`
         );
-        navigate("/move-containers"); // Navigate to MoveContainersUnload page
+        localStorage.setItem("containers_to_load", JSON.stringify(loaded_containers_state_bypass));
+        navigate("/move-containers-unload"); // Navigate to MoveContainersUnload page
       } else {
         // User cancels navigation; remain on the current page
         setRemainingContainers(0); // Reset remaining containers to 0
