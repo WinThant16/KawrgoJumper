@@ -7,14 +7,22 @@ import "../styles/SelectContainers.css";
 import { parse_manifest } from "../lib/manifest_parser";
 import { shallow_extended_matrix } from "../lib/taskcommon";
 
-
+let manifest_matrix;
+let manifest_name = "";
 
 function MoveContainersUnload(){
   const [stepi, setStep] = useState(0);
+  //const [manifest_matrix, setManifest] = useState({});
+  //const [manifest_name, setManifestName] = useState("");
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
-  const manifest_matrix = shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), []));
+  if(manifest_name !== localStorage.getItem("manifestFileName")){
+    manifest_name = localStorage.getItem("manifestFileName");
+    manifest_matrix = shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), []));
+    //setManifestName(localStorage.getItem("manifestFileName"));
+    //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
+  }
   const navigate = useNavigate();
 
   let destination_container;// = [steps[0].path[steps[0].path.length-1]];
@@ -41,6 +49,21 @@ function MoveContainersUnload(){
   }
 
   const nextStep = () => {
+    const destination = steps[stepi].path[steps[stepi].path.length-1];
+    const source = steps[stepi].source
+    const dest_container = manifest_matrix[destination[0]][destination[1]];
+    const src_container = manifest_matrix[source[0]][source[1]];
+    if(steps[stepi].destination === "TRUCK"){
+      console.log("clear")
+      src_container.clear();
+      console.log("cleared", src_container);
+    }else{
+      console.log("swap")
+      console.log("preswap ", dest_container, src_container)
+      dest_container.swap(src_container);
+      console.log("swapped ", dest_container, src_container)
+    }
+    //setManifest(manifest_matrix);
     setStep(stepi+1);
     processStep();
     //navigate("/");

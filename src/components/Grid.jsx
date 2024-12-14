@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Grid.css";
+import { deepCopyManifest } from "../lib/taskcommon";
 
 function isPositionInArray(array, row, col, manifest_matrix) {
   return array.some((position) => {
@@ -19,52 +20,9 @@ function Grid({
   path_containers = [],
   start_container = [],
 }) {
-  const [gridData, setGridData] = useState([]);
-
-  const loadManifest = () => {
-    const rows = manifest_matrix.length;
-    const cols = manifest_matrix[0].length;
-    const grid = Array.from({ length: rows }, () =>
-      Array.from({ length: cols }, () => ({
-        id: null,
-        name: "UNUSED",
-        weight: "0",
-      }))
-    );
-
-    if (manifest_matrix) {
-      // const lines = manifest_matrix.split("\n");
-      // lines.forEach((line) => {
-      //   const parts = line.split(", ");
-      //   const coordinates = parts[0];
-      //   const weight = parts[1];
-      //   const name = parts[2];
-      for (let i = 0; i < manifest_matrix.length; i++) {
-        for (let j = 0; j < manifest_matrix[0].length; j++) {
-          const row = i + 1; //parseInt(coordinates.substring(1, 3));
-          const col = j + 1; //parseInt(coordinates.substring(4, 6));
-          const rowIdx = manifest_matrix.length - row;
-          const colIdx = col - 1;
-          //console.log("container parse1",manifest_matrix[i]);
-          //console.log("container parse2",manifest_matrix[i][j]);
-          if (rowIdx >= 0 && colIdx >= 0 && rowIdx < rows && colIdx < cols) {
-            grid[rowIdx][colIdx] = {
-              id: `${row},${col}`,
-              name: manifest_matrix[i][j].name.trim(),
-              weight: parseInt(manifest_matrix[i][j].weight),
-            };
-          }
-          //});
-        }
-      }
-    }
-
-    setGridData(grid);
-  };
-
-  useEffect(() => {
-    loadManifest();
-  }, [manifest_matrix]);
+  //const [gridData, setGridData] = useState([]);
+  const rows = manifest_matrix.length;
+  const cols = manifest_matrix[0].length;
 
   const truncateText = (text, maxLength) => {
     return text.length > maxLength
@@ -74,7 +32,7 @@ function Grid({
 
   return (
     <div className="grid-container">
-      {gridData.map((row, rowIndex) => (
+      {deepCopyManifest(manifest_matrix).reverse().map((row, rowIndex) => (
         <div key={`row-${rowIndex}`} className="grid-row">
           {row.map((cell, colIndex) => {
             let className;
