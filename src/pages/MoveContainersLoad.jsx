@@ -28,6 +28,13 @@ function MoveContainersLoad(){
   let path_containers;// = steps[0].path;
   const steps = JSON.parse(localStorage.getItem("load_steps")); //{"destination": [1,2], "start": [3,4], "path":[[1,2],[3,4]]} //localStorage.getItem("steps")
 
+  let container_name_label;
+  let container_pos;
+  if(stepi < steps.length){
+    container_name_label = containers_to_load[stepi].name;
+    container_pos = `[${steps[stepi].destination[0]},${steps[stepi].destination[1]}]`;
+  }
+
   //localStorage.setItem("currentPage", "move-containers-unload");
   //console.log("steps", localStorage.getItem("steps"))
   
@@ -56,15 +63,16 @@ function MoveContainersLoad(){
     dest_container.weight = containers_to_load[stepi].weight
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent",matrix_to_string(manifest_matrix_noextend))
-    if(stepi === steps.length -1){
-      navigate("/summary");
-    }else{
+    if(stepi < steps.length-1){
       setStep(stepi+1);
       processStep();
+    }else{
+      navigate("/summary");
     }
   };
-
-  processStep();
+  if(stepi < steps.length){
+    processStep();
+  }
   
   return (
     <div className="select-containers-page">
@@ -96,7 +104,7 @@ function MoveContainersLoad(){
       <div className="info-box">
           <span className="info-label">
           <strong>Current Task: </strong>
-            <bold>Load container {containers_to_load[stepi].name} to {`[${steps[stepi].destination[0]},${steps[stepi].destination[1]}]`}</bold>
+            <bold>Load container {container_name_label} to {container_pos}</bold>
           </span>
         </div>
         <Grid

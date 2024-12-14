@@ -27,10 +27,18 @@ function Balance(){
 
   let destination_label = "TRUCK";
 
+
   let destination_container;// = [steps[0].path[steps[0].path.length-1]];
   let start_container;// = [steps[0].source];
   let path_containers;// = steps[0].path;
   const steps = JSON.parse(localStorage.getItem("steps")); //{"destination": [1,2], "start": [3,4], "path":[[1,2],[3,4]]} //localStorage.getItem("steps")
+
+  let container_label;
+  let src_pos_label;
+  if(stepi < steps.length){
+    container_label= manifest_matrix[steps[stepi].source[0]][steps[stepi].source[1]].name
+    src_pos_label = `[${steps[stepi].source[0]},${steps[stepi].source[1]}]`;
+  }
 
   //localStorage.setItem("currentPage", "move-containers-unload");
   //console.log("steps", localStorage.getItem("steps"))
@@ -56,7 +64,7 @@ function Balance(){
     }
   }
 
-  const nextStep = async () => {
+  const nextStep = () => {
     const destination = steps[stepi].path[steps[stepi].path.length-1];
     const source = steps[stepi].source
     const dest_container = manifest_matrix[destination[0]][destination[1]];
@@ -73,19 +81,25 @@ function Balance(){
     }
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
-    if(stepi === steps.length-1){
-      // prepare load steps
-      console.log(manifest_matrix_noextend);
-      console.log(localStorage.getItem("manifestFileContent"));
-      navigate("/summary");
-    }else{
+    if(stepi < steps.length-1){
       setStep(stepi+1);
       processStep();
+    }else{
+      finish();
     }
   };
-
-  processStep();
   
+  const finish = async ()=>{
+    // prepare load steps
+    navigate("/summary");
+  }
+  if(stepi >= steps.length){
+    finish();
+  }else{
+    processStep();
+  }
+
+
   return (
     <div className="select-containers-page">
       <Navbar />
@@ -116,7 +130,7 @@ function Balance(){
       <div className="info-box">
           <span className="info-label">
           <strong>Current Task: </strong>
-            <bold>Move container at {`[${steps[stepi].source[0]},${steps[stepi].source[1]}]`} ({manifest_matrix[steps[stepi].source[0]][steps[stepi].source[1]].name}) to {destination_label}</bold>
+            <bold>Move container at {src_pos_label} ({container_label}) to {destination_label}</bold>
           </span>
         </div>
         <Grid
