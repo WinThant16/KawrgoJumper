@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/TaskSelection.css"; // Reuse styles
+import "../styles/LoadContainers.css"; // Reuse styles
 import Navbar from "../components/Navbar.js";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { submitLog } from "../lib/requestLib";
@@ -16,7 +16,7 @@ function LoadContainers() {
 
   const navigate = useNavigate(); // Initialize navigation
 
-  localStorage.setItem('currentPage', 'load-containers');
+  localStorage.setItem("currentPage", "load-containers");
 
   const startLoading = () => {
     if (!totalContainers || totalContainers <= 0) {
@@ -43,8 +43,14 @@ function LoadContainers() {
       setError("Container name is required.");
       return;
     }
-    if (!currentContainer.weight || currentContainer.weight <= 0) {
-      setError("Container weight must be a positive number.");
+    if (
+      !currentContainer.weight ||
+      currentContainer.weight <= 0 ||
+      currentContainer.weight > 99999
+    ) {
+      setError(
+        "Container weight must be a positive whole number less than or equal to 99999."
+      );
       return;
     }
 
@@ -74,7 +80,10 @@ function LoadContainers() {
         submitLog(
           `All containers (${totalContainers}) have been successfully loaded.`
         );
-        localStorage.setItem("containers_to_load", JSON.stringify(loaded_containers_state_bypass));
+        localStorage.setItem(
+          "containers_to_load",
+          JSON.stringify(loaded_containers_state_bypass)
+        );
         navigate("/move-containers-unload"); // Navigate to MoveContainersUnload page
       } else {
         // User cancels navigation; remain on the current page
@@ -131,77 +140,82 @@ function LoadContainers() {
           {error && <p className="error">{error}</p>}
         </div>
       ) : (
-        <div>
-          <h1>Loading Process</h1>
-          <p>Containers left to load: {remainingContainers}</p>
-          <div>
+        <div className="splitScreen">
+          <div className="left">
+            <h1>Loading Process</h1>
+            <p>Containers left to load: {remainingContainers}</p>
             <div>
-              <input
-                type="text"
-                value={currentContainer.name}
-                onChange={(e) =>
-                  setCurrentContainer({
-                    ...currentContainer,
-                    name: e.target.value,
-                  })
-                }
-                placeholder="Enter Container Name"
-                className="shaded-text-box large"
-              />
-              {!currentContainer.name && error && (
-                <p className="error">Container name is required.</p>
-              )}
+              <div>
+                <input
+                  type="text"
+                  value={currentContainer.name}
+                  onChange={(e) =>
+                    setCurrentContainer({
+                      ...currentContainer,
+                      name: e.target.value,
+                    })
+                  }
+                  placeholder="Enter Container Name"
+                  className="shaded-text-box large"
+                />
+                {!currentContainer.name && error && (
+                  <p className="error">Container name is required.</p>
+                )}
+              </div>
+              <div>
+                <input
+                  type="number"
+                  value={currentContainer.weight}
+                  onChange={(e) =>
+                    setCurrentContainer({
+                      ...currentContainer,
+                      weight: e.target.value,
+                    })
+                  }
+                  placeholder="Enter Container Weight"
+                  className="shaded-text-box large"
+                />
+                {(currentContainer.weight > 99999 ||
+                  currentContainer.weight <= 0) &&
+                  error && (
+                    <p className="error">
+                      Container weight must be a positive whole number less than
+                      or equal to 99999.
+                    </p>
+                  )}
+              </div>
+              <button
+                onClick={handleNextContainer}
+                className="task-selection-button"
+              >
+                Next Container
+              </button>
             </div>
-            <div>
-              <input
-                type="number"
-                value={currentContainer.weight}
-                onChange={(e) =>
-                  setCurrentContainer({
-                    ...currentContainer,
-                    weight: e.target.value,
-                  })
-                }
-                placeholder="Enter Container Weight"
-                className="shaded-text-box large"
-              />
-              {!currentContainer.weight && error && (
-                <p className="error">
-                  Container weight must be a positive number.
-                </p>
-              )}
+          </div>
+          <div className="right">
+              <h2>Loaded Containers</h2>
+              <ul className="loaded-list">
+                {loadedContainers.map((container) => (
+                  <li key={container.id}>
+                    {container.name} - {container.weight}kg
+                    <button
+                      onClick={() => handleDeleteContainer(container.id)}
+                      style={{
+                        marginLeft: "10px",
+                        padding: "5px 10px",
+                        backgroundColor: "red",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <button
-              onClick={handleNextContainer}
-              className="task-selection-button"
-            >
-              Next Container
-            </button>
-          </div>
-          <div>
-            <h2>Loaded Containers</h2>
-            <ul className="loaded-list">
-              {loadedContainers.map((container) => (
-                <li key={container.id}>
-                  {container.name} - {container.weight}kg
-                  <button
-                    onClick={() => handleDeleteContainer(container.id)}
-                    style={{
-                      marginLeft: "10px",
-                      padding: "5px 10px",
-                      backgroundColor: "red",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       )}
     </div>
