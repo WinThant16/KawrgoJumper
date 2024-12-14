@@ -130,9 +130,22 @@ const stateComparator = (a, b) => a.cost - b.cost;
 // state.cost contains cost without moving crane back
 // state.steps contains steps
 function computeBalance(manifest_matrix) {
+
   const walls = getWalls(manifest_matrix);
   const mid = (walls[0] + walls[1]) / 2;
   const state_heap = new Heap(stateComparator); // heap of exploration paths sorted by cost, obviously we want to pursue cheaper paths first
+  // count containers
+  let containers = 0;
+  for (let i = 0; i < manifest_matrix.length; i++) {
+    for (let j = 0; j < manifest_matrix.length; j++) {
+      if (
+        manifest_matrix[i][j] !== "NULL" &&
+        manifest_matrix[i][j] !== "UNUSED") {
+          containers++
+        }
+    }
+  }
+  
 
   // this is gonna get so expensive
   let iterations = 0;
@@ -142,7 +155,10 @@ function computeBalance(manifest_matrix) {
   // prepare initial state
   const initial_state = new state(manifest_matrix, [], 0);
   const weights = computeWeights(manifest_matrix, walls);
-  if (weightsBalanced(weights)) {
+  if(containers <= 1){ // if we have 1 or 0 containers return no steps! Its balanced!
+    return initial_state;
+  }
+  if (weightsBalanced(weights)) { // if its already balanced, its already balanced!
     // initial exit condition
     return initial_state;
   }
