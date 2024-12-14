@@ -18,6 +18,12 @@ function Summary() {
         });
     }
 
+  const reset = () => {
+    const user = localStorage.getItem("username");
+    localStorage.clear();
+    localStorage.setItem("username", user);
+    navigate("/upload-manifest")
+  }
   return (
     <div className="task-selection-container">
       <Navbar />
@@ -27,9 +33,9 @@ function Summary() {
       <div className="shaded-text-box large">
         {saved_path}
       </div>
-      <h1 style={{ padding: "4%" }}>Remember to email the captain!</h1>
+      <h1 style={{ padding: "2%" }}>Remember to email the captain!</h1>
       <button
-          onClick={() => navigate("/upload-manifest")}
+          onClick={() => reset()}
           className="task-selection-button"
         >
           Back to Upload Screen
