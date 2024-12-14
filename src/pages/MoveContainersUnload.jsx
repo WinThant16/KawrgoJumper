@@ -7,9 +7,7 @@ import "../styles/SelectContainers.css";
 import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
 import { shallow_extended_matrix } from "../lib/taskcommon";
 
-let manifest_matrix;
-let manifest_matrix_noextend;
-let manifest_name = "";
+
 
 function MoveContainersUnload(){
   const [stepi, setStep] = useState(0);
@@ -18,13 +16,13 @@ function MoveContainersUnload(){
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
-  if(manifest_name !== localStorage.getItem("manifestFileName")){
-    manifest_name = localStorage.getItem("manifestFileName");
-    manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
-    manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
-    //setManifestName(localStorage.getItem("manifestFileName"));
-    //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
-  }
+  
+  let manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+  let manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+    
+  //setManifestName(localStorage.getItem("manifestFileName"));
+  //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
+  
   const navigate = useNavigate();
 
   let destination_label = "TRUCK";
@@ -74,11 +72,11 @@ function MoveContainersUnload(){
       console.log("swapped ", dest_container, src_container)
     }
     //setManifest(manifest_matrix);
+    localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
     if(stepi === steps.length-1){
       // prepare load steps
       const num_containers_to_load = JSON.parse(localStorage.getItem("containers_to_load")).length;
       console.log(manifest_matrix_noextend);
-      localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
       console.log(localStorage.getItem("manifestFileContent"));
       const load_steps = await computeLoad(num_containers_to_load);
       console.log("load steps",load_steps)

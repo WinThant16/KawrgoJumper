@@ -7,10 +7,6 @@ import "../styles/SelectContainers.css";
 import { container, matrix_to_string, parse_manifest } from "../lib/manifest_parser";
 import { shallow_extended_matrix } from "../lib/taskcommon";
 
-let manifest_matrix;
-let manifest_matrix_noextend;
-let manifest_name = "";
-
 function MoveContainersLoad(){
   const [stepi, setStep] = useState(0);
   //const [manifest_matrix, setManifest] = useState({});
@@ -19,13 +15,12 @@ function MoveContainersLoad(){
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
   const containers_to_load = JSON.parse(localStorage.getItem("containers_to_load"));
-  if(manifest_name !== localStorage.getItem("manifestFileName")){
-    manifest_name = localStorage.getItem("manifestFileName");
-    manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
-    manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+
+  const manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+  const manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
     //setManifestName(localStorage.getItem("manifestFileName"));
     //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
-  }
+  
   const navigate = useNavigate();
 
   let destination_container;// = [steps[0].path[steps[0].path.length-1]];
@@ -60,9 +55,8 @@ function MoveContainersLoad(){
     dest_container.name = containers_to_load[stepi].name
     dest_container.weight = containers_to_load[stepi].weight
     //setManifest(manifest_matrix);
-
+    localStorage.setItem("manifestFileContent",matrix_to_string(manifest_matrix_noextend))
     if(stepi === steps.length -1){
-      localStorage.setItem("manifestFileContent",matrix_to_string(manifest_matrix_noextend))
       navigate("/summary");
     }else{
       setStep(stepi+1);
