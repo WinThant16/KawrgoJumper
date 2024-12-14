@@ -18,7 +18,18 @@ function LoadContainers() {
 
   const startLoading = () => {
     if (!totalContainers || totalContainers <= 0) {
-      setError("Please enter a valid number of containers.");
+      if (
+        window.confirm(
+          "You entered 0 containers. Would you like to move forward to the next step?"
+        )
+      ) {
+        setRemainingContainers(0); // Move forward with 0 containers
+        setError("");
+        navigate("/move-containers"); // Navigate to the next step
+      } else {
+        setTotalContainers(""); // Reset the form
+        setError("");
+      }
       return;
     }
     setRemainingContainers(parseInt(totalContainers));
@@ -40,17 +51,28 @@ function LoadContainers() {
       { ...currentContainer, id: loadedContainers.length + 1 },
     ]);
 
-    //log loaded container
-    submitLog(`Container loaded: Name - "${currentContainer.name}", Weight - ${currentContainer.weight}kg.`);
+    // Log loaded container
+    submitLog(
+      `Container loaded: Name - "${currentContainer.name}", Weight - ${currentContainer.weight}kg.`
+    );
     setCurrentContainer({ name: "", weight: "" });
 
     if (remainingContainers - 1 > 0) {
       setRemainingContainers(remainingContainers - 1);
     } else {
-      alert("All containers have been successfully loaded!");
-      //log when all containers are loaded.
-      submitLog(`All containers (${totalContainers}) have been successfully loaded.`);
-      navigate("/move-containers-unload"); // Navigate to MoveContainersUnload page
+      if (
+        window.confirm(
+          "All containers have been successfully loaded. Would you like to move to the next step?"
+        )
+      ) {
+        submitLog(
+          `All containers (${totalContainers}) have been successfully loaded.`
+        );
+        navigate("/move-containers"); // Navigate to MoveContainersUnload page
+      } else {
+        // User cancels navigation; remain on the current page
+        setRemainingContainers(0); // Reset remaining containers to 0
+      }
     }
     setError("");
   };
@@ -59,20 +81,19 @@ function LoadContainers() {
     const containerToDelete = loadedContainers.find(
       (container) => container.id === id
     );
-    
+
     const updatedContainers = loadedContainers.filter(
       (container) => container.id !== id
     );
     setLoadedContainers(updatedContainers);
     setRemainingContainers((prevCount) => prevCount + 1); // Increment remaining containers
-    
+
     // Log the deleted container
     if (containerToDelete) {
       submitLog(
         `Container deleted: Name - "${containerToDelete.name}", Weight - ${containerToDelete.weight}kg.`
       );
     }
-  
   };
 
   const resetForm = () => {
@@ -97,10 +118,7 @@ function LoadContainers() {
             placeholder="Enter number of containers"
             className="shaded-text-box large"
           />
-          <button
-            onClick={startLoading}
-            className="task-selection-button"
-          >
+          <button onClick={startLoading} className="task-selection-button">
             Start Loading
           </button>
           {error && <p className="error">{error}</p>}
@@ -115,7 +133,10 @@ function LoadContainers() {
                 type="text"
                 value={currentContainer.name}
                 onChange={(e) =>
-                  setCurrentContainer({ ...currentContainer, name: e.target.value })
+                  setCurrentContainer({
+                    ...currentContainer,
+                    name: e.target.value,
+                  })
                 }
                 placeholder="Enter Container Name"
                 className="shaded-text-box large"
@@ -138,7 +159,9 @@ function LoadContainers() {
                 className="shaded-text-box large"
               />
               {!currentContainer.weight && error && (
-                <p className="error">Container weight must be a positive number.</p>
+                <p className="error">
+                  Container weight must be a positive number.
+                </p>
               )}
             </div>
             <button
