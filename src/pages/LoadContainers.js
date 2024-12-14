@@ -39,8 +39,8 @@ function LoadContainers() {
   };
 
   const handleNextContainer = () => {
-    if (!currentContainer.name) {
-      setError("Container name is required.");
+    if (!currentContainer.name || currentContainer.name.length > 255) {
+      setError("Container name is required and must be less than 256 characters.");
       return;
     }
     if (
@@ -158,8 +158,8 @@ function LoadContainers() {
                   placeholder="Enter Container Name"
                   className="shaded-text-box large"
                 />
-                {!currentContainer.name && error && (
-                  <p className="error">Container name is required.</p>
+                {(!currentContainer.name || currentContainer.name.length > 255) && error && (
+                  <p className="error">Container name is required and must be shorter than 256 characters.</p>
                 )}
               </div>
               <div>

@@ -66,6 +66,7 @@ button:hover {
   font-size: 20px; /* Increased font size */
   font-weight: bold; /* Make the text bold */
   text-align: center; /* Center align the text */
+  word-wrap: break-word;
   
 }
 
@@ -78,4 +79,5 @@ button:hover {
 .left,
 .right {
   height: 97%;
+  max-width: 40vw;
 }
