@@ -50,7 +50,7 @@ function LoadContainers() {
       alert("All containers have been successfully loaded!");
       //log when all containers are loaded.
       submitLog(`All containers (${totalContainers}) have been successfully loaded.`);
-      navigate("/move-containers"); // Navigate to MoveContainersUnload page
+      navigate("/move-containers-unload"); // Navigate to MoveContainersUnload page
     }
     setError("");
   };

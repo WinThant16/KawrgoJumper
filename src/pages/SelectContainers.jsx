@@ -74,9 +74,9 @@ function SelectContainers(){
     submitLog("Selecting Containers to Load.");
     const zero_indexed_selected_containers = []; // it really shoudlve been 0indexed in the first place
     for(let i = 0; i<selected_containers.length; i++){
-      zero_indexed_selected_containers.push([selected_containers[0]-1, selected_containers[1]-1]);
+      zero_indexed_selected_containers.push([selected_containers[i][0]-1, selected_containers[i][1]-1]);
     }
-    localStorage.setItem("selected_containers", zero_indexed_selected_containers);
+    localStorage.setItem("selected_containers", JSON.stringify(zero_indexed_selected_containers));
     navigate("/load-containers");
   }
 

@@ -5,13 +5,12 @@ function MoveContainersUnload() {
 	const [unloadSteps, setUnloadSteps] = useState([]);
 	const [error, setError] = useState(null);
 
-	const selectedContainers = localStorage.getItem("selected_containers");
-
   useEffect(() => {
     // Fetch unloading steps from the backend
     async function fetchUnloadSteps() {
       try {
         // Replace 'get' with the correct call to computeUnload
+        const selectedContainers = JSON.parse(localStorage.getItem("selected_containers"));
         const response = await requestLib.computeUnload(selectedContainers); // Example: Pass correct container positions
         setUnloadSteps(response || []);
       } catch (err) {
