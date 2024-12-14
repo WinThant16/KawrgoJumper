@@ -1,176 +1,134 @@
-import React, {useState, useEffect} from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import "../styles/Balance.css";
+import Grid from "../components/Grid";
 import { useNavigate } from "react-router-dom";
+import { computeLoad, submitLog } from "../lib/requestLib";
+import "../styles/SelectContainers.css";
+import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
+import { shallow_extended_matrix } from "../lib/taskcommon";
 
-/*testing branch*/
+
+
 function Balance(){
-  const [gridData, setGridData] = useState([]);
-  const [containersToBalance, setContainersToBalance] = useState([]);
+  const [stepi, setStep] = useState(0);
+  //const [manifest_matrix, setManifest] = useState({});
+  //const [manifest_name, setManifestName] = useState("");
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
+  
+  let manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+  let manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+    
+  //setManifestName(localStorage.getItem("manifestFileName"));
+  //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
+  
   const navigate = useNavigate();
 
-  //######TODO#######
-  //replace these constants with ETA and Current task from alg
-  const etaTime = "20min";
-  const currentTask = "Move Container A from [x, y] to [x, y]";
+  let destination_label = "TRUCK";
 
-  const loadManifest = () => {
-    const manifest = localStorage.getItem("manifestFileContent");
+  let destination_container;// = [steps[0].path[steps[0].path.length-1]];
+  let start_container;// = [steps[0].source];
+  let path_containers;// = steps[0].path;
+  const steps = JSON.parse(localStorage.getItem("steps")); //{"destination": [1,2], "start": [3,4], "path":[[1,2],[3,4]]} //localStorage.getItem("steps")
 
-    const rows = 8;
-    const cols = 12;
-    const grid = [];
+  //localStorage.setItem("currentPage", "move-containers-unload");
+  //console.log("steps", localStorage.getItem("steps"))
+  
+  //console.log(steps[0])
+ // console.log(steps[0].path, steps[0].path.length-1)
+  //console.log([steps[0].path[steps[0].path.length-1]])
+  console.log("steps", steps);
+  console.log("outside processstep", stepi)
 
-    for(let i = 0; i < rows; i++){
-      const row = [];
-      for(let j = 0; j < cols; j++){
-        row.push({ id: null, name: "NAN", weight:"0"});
-      }
-      grid.push(row);
+  const processStep = () =>{
+    // console.log("inside processstep", stepi)
+    // console.log("AAA", steps[stepi])
+    // console.log("BBB", steps[stepi].path, steps[stepi].path.length-1)
+    // console.log("CCC", [steps[stepi].path[steps[stepi].path.length-1]])
+    destination_container = [steps[stepi].path[steps[stepi].path.length-1]]
+    start_container = [steps[stepi].source];
+    path_containers = steps[stepi].path;
+    if(steps[stepi].destination === "TRUCK"){
+      destination_label = "TRUCK";
+    }else{
+      destination_label = `[${steps[stepi].destination[0]},${steps[stepi].destination[1]}]`
     }
-
-    const lines = manifest.split("\n"); // split into lines
-    for(let i = 0; i < lines.length; i++){
-      const line = lines[i];
-      const parts = line.split(", "); // split into each individual value
-      const coordinates = parts[0];
-      const weight = parts[1];
-      const name = parts[2];
-
-      const row = parseInt(coordinates.substring(1,3));
-      const col = parseInt(coordinates.substring(4,6));
-
-      const rowIdx = 8 - row;
-      const colIdx = col - 1;
-
-      if (rowIdx >= 0 && colIdx >= 0 && rowIdx < rows && colIdx < cols){
-        grid[rowIdx][colIdx] = { id: `${row},${col}`, name: name.trim(), weight: parseInt(weight.replace(/[{}]/g, ""), 10),};
-      }
-    }
-    setGridData(grid);
-  };
-
-  useEffect(() => {
-    loadManifest();
-  }, []);
-
-  const selectedContainer = (row, col, container) => {
-    if (container.name === "UNUSED" || container.name === "NAN") return;
-    const key = `[${8 - row},${col + 1}]`;
-    const isSelected = containersToBalance.some((item) => item.position === key);
-
-    if (isSelected) {
-      setContainersToBalance(containersToBalance.filter((item) => item.position !== key));
-    } else {
-      setContainersToBalance([...containersToBalance, { position: key, name: container.name, weight: container.weight }]);
-    }
-  };
-
-  const beginProcess = () =>{
-    navigate("/move-containers");
   }
 
-  const bufferPage = () => {
-    navigate("/buffer");
-  }
-
-  const displayGrid = () => {
-    return gridData.map((row, rowIndex) => (
-      <div key={`row-${rowIndex}`} className="grid-row">
-        {row.map((cell, colIndex) => {
-          let className;
-          if (cell.name === "NAN") {
-            className = "grid-cell nan";
-          } else if (cell.name === "UNUSED") {
-            className = "grid-cell unused";
-          } else {
-            className = containersToBalance.some(
-              (item) => item.position === `[${8 - rowIndex},${colIndex + 1}]`
-            )
-              ? "grid-cell used selected"
-              : "grid-cell used";
-          }
-          
-          const position = `[${8 - rowIndex}, ${colIndex + 1}]`;
-          // const displayWeight = cell.name === "UNUSED" ? "UNUSED" : `${cell.weight} kg`;
-
-          return (
-            <div
-              key={`cell-${rowIndex}-${colIndex}`}
-              className={className}
-              onMouseEnter={() =>
-                setHoveredContainer({
-                  name: cell.name,
-                  weight: cell.weight,
-                  row: rowIndex,
-                  col: colIndex,
-                })
-              }
-              onMouseLeave={() => setHoveredContainer({ name: "", weight: "", row: 0, col: 0 })}
-              onClick={() => selectedContainer(rowIndex, colIndex, cell)}
-            >
-              <span className="cell-text">
-                {cell.name === "NAN" ? "NAN" : (
-                  <>
-                    {position}<br />
-                    {cell.weight}kg
-                  </>
-              )}
-              </span>
-              {/* <span className="cell-weight">{displayWeight}</span> */}
-
-              { hoveredContainer.name === cell.name &&
-                hoveredContainer.row === rowIndex &&
-                hoveredContainer.col === colIndex && (
-                  <div className="hover-popup">
-                    { <p>{`Name: ${cell.name}`}</p> }
-                    <p>{`Weight: ${cell.weight}kg`}</p>
-                  </div>
-                )}
-            </div>
-          );
-        })}
-      </div>
-    ));
+  const nextStep = async () => {
+    const destination = steps[stepi].path[steps[stepi].path.length-1];
+    const source = steps[stepi].source
+    const dest_container = manifest_matrix[destination[0]][destination[1]];
+    const src_container = manifest_matrix[source[0]][source[1]];
+    if(steps[stepi].destination === "TRUCK"){
+      console.log("clear")
+      src_container.clear();
+      console.log("cleared", src_container);
+    }else{
+      console.log("swap")
+      console.log("preswap ", dest_container, src_container)
+      dest_container.swap(src_container);
+      console.log("swapped ", dest_container, src_container)
+    }
+    //setManifest(manifest_matrix);
+    localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
+    if(stepi === steps.length-1){
+      // prepare load steps
+      console.log(manifest_matrix_noextend);
+      console.log(localStorage.getItem("manifestFileContent"));
+      navigate("/summary");
+    }else{
+      setStep(stepi+1);
+      processStep();
+    }
   };
 
+  processStep();
+  
   return (
-    <div className="balance-page">
+    <div className="select-containers-page">
       <Navbar />
-    
-      <div className="balance-page-left">
-        <div className="info-section">
-          <div className="info-box">
-            <p><strong>Current File: </strong></p>
-            <p>{currentFile}</p>
-          </div>
-          <div className="info-box">
-            <p><strong>Job:</strong></p>
-            <p>{jobType}</p>
-          </div>
-          <div className="info-box">
-            <p><strong>ETA:</strong></p>
-            <p>{etaTime}</p>
-          </div>
-          <div className="balance-page-right">
-            <button className="begin-button" onClick={beginProcess}>Begin</button>
-          </div>
+      <div className="info-section">
+        <div className="info-box">
+          <span className="info-label">
+            <strong>Current File: </strong>
+          </span>
+          <span className="info-value">{currentFile}</span>
         </div>
-        <div className="lower-info-section">
-          <div className="info-box">
-            <p><strong>Current Task: </strong></p>
-            <p>{currentTask}</p>
-          </div>
-          <button  className="next-button" onClick={beginProcess}>Next Step</button>
-          <button className="showBuffer-button" onClick={bufferPage}>Show Buffer</button>
+        <div className="info-box">
+          <span className="info-label">
+            <strong>Job:</strong>
+          </span>
+          <span className="info-value">{jobType}</span>
         </div>
+        <div className="info-box">
+          <span className="info-label">
+            <strong>ETA:</strong>
+          </span>
+          <span className="info-value">{2121}</span>
+        </div>
+        <button className="begin-button" onClick={nextStep}>
+          Next
+        </button>
       </div>
       <div className="content-container">
-        <div className="grid-container">{displayGrid()}</div>
-      </div> 
+      <div className="info-box">
+          <span className="info-label">
+          <strong>Current Task: </strong>
+            <bold>Move container at {`[${steps[stepi].source[0]},${steps[stepi].source[1]}]`} ({manifest_matrix[steps[stepi].source[0]][steps[stepi].source[1]].name}) to {destination_label}</bold>
+          </span>
+        </div>
+        <Grid
+          manifest_matrix={manifest_matrix} // Pass manifest content
+          onCellClick={()=>{}}
+          hoveredContainer={hoveredContainer}
+          setHoveredContainer={setHoveredContainer}
+          destination_container={destination_container}
+          start_container={start_container}
+          path_containers={path_containers}
+        />
+      </div>
     </div>
   );
 }
