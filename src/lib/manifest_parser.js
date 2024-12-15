@@ -56,8 +56,8 @@ function parse_manifest(manifest_text, rows=8, cols=12){
         const name = groups[4];
         const ship_container = new container(row, col, weight, name)
 
-        console.log("row col", row, col)
-        console.log("row col", Number(row), Number(col))
+        //console.log("row col", row, col)
+        //console.log("row col", Number(row), Number(col))
         ship_grid[Number(row)-1][Number(col)-1] = ship_container;
     }
 
