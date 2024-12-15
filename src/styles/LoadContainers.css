@@ -19,7 +19,7 @@ input {
   padding: 10px;
   font-size: 16px;
   width: 50%;
-  border: 2px solid #003C7D; /* Blue border */
+  border: 2px solid #003c7d; /* Blue border */
   border-radius: 8px; /* Rounded corners */
   outline: none; /* Remove default focus outline */
   margin-bottom: 20px; /* Adds space below the input field */
@@ -29,7 +29,7 @@ button {
   padding: 15px 30px;
   background-color: navy;
   color: white;
-  border: 3px solid #003C7D;
+  border: 3px solid #003c7d;
   border-radius: 10px;
   cursor: pointer;
   font-size: 18px;
@@ -50,26 +50,35 @@ button:hover {
 }
 
 .loaded-list {
-    margin-top: 20px;
-    text-align: left;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 50%;
-  }
+  list-style: none !important; /* Forces removal of bullet points */
+  padding: 0; /* Removes default padding */
+  height: 50vh;
+  overflow-y: scroll;
+  margin-top: auto;
   
-  .loaded-list ul {
-    list-style: none !important; /* Forces removal of bullet points */
-    padding: 0; /* Removes default padding */
-    margin: 0; /* Removes default margin */
-  }
+}
+
+.loaded-list li {
+  background-color: lightgray;
+  margin: 5px 0;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 20px; /* Increased font size */
+  font-weight: bold; /* Make the text bold */
+  text-align: center; /* Center align the text */
+  word-wrap: break-word;
   
-  .loaded-list li {
-    background-color: lightgray;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 20px; /* Increased font size */
-    font-weight: bold; /* Make the text bold */
-    text-align: center; /* Center align the text */
-  }
-  
+}
+
+.splitScreen {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-top: 10vh;
+}
+
+.left,
+.right {
+  height: 97%;
+  max-width: 40vw;
+}

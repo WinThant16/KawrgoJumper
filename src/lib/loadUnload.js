@@ -94,6 +94,7 @@ function computeUnload(manifest_matrix, containers_to_unload){
 
 // basically pick closest unused slot a bunch of times
 function computeLoad(manifest_matrix, amount){
+    console.log(amount);
     const forbiddenRows = [];
     const copy = shallow_extended_matrix(manifest_matrix, forbiddenRows);
     manifest_matrix = copy;
@@ -102,7 +103,9 @@ function computeLoad(manifest_matrix, amount){
     const source = [8,0]; //left most right above the edge of the ship
     for (let i = 0; i < amount; i++){
         const path = findClosestUnusedBFS(manifest_matrix, source, [], forbiddenRows);
-        steps.push(new step(source, path[path.length-1], path));
+        const dest = path[path.length-1];
+        manifest_matrix[dest[0]][dest[1]].name = "TEMP";
+        steps.push(new step("TRUCK", dest, path));
     }
     return steps;
 }

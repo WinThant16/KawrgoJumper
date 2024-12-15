@@ -1,0 +1,96 @@
+.grid-container{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    margin: 3vh auto;
+    width: 100%;
+    max-width: 1080px;
+    height: 69vh;
+}
+
+.grid-row{
+    display: contents;
+}
+
+.grid-cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-size: 15px;
+    background-color: rgb(206, 203, 203);
+    text-align: center;
+    height: 95%;
+    width: 95%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.grid-cell .cell-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.grid-cell.nan {
+    background-color: #323232;
+    color: white;
+}
+
+.grid-cell.unused{
+    background-color: #aba8a8;
+    color: white;
+}
+
+.grid-cell.used{
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.grid-cell.destination{
+    background-color: #ff0000;
+    color: white;
+    font-weight: bold;
+}
+.grid-cell.source{
+    background-color: #00ff37;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.grid-cell.path{
+    background-color: #d9ff00;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.grid-cell.used.selected {
+    background-color: #28a745; 
+  }
+  
+.hover-popup {
+    position: absolute;
+    transform: translate(0%, -125%);
+    background-color: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+  
+.hover-popup p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.grid-cell.used:hover {
+    cursor:pointer;
+}
+
+.grid-cell.grid-cell.used.selected:hover {
+    cursor: pointer;
+}

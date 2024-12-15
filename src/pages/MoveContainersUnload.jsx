@@ -9,20 +9,21 @@ import { shallow_extended_matrix } from "../lib/taskcommon";
 
 
 
-function Balance(){
+function MoveContainersUnload(){
   const [stepi, setStep] = useState(0);
   //const [manifest_matrix, setManifest] = useState({});
   //const [manifest_name, setManifestName] = useState("");
   const [hoveredContainer, setHoveredContainer] = useState({ name: "", weight: "", row: 0, col: 0 });
-  const currentFile = localStorage.getItem("manifestFileName");
-  const jobType = localStorage.getItem("jobType");
-  
-  localStorage.setItem('currentPage', 'balance');
 
-  const saved_stepi = Number(localStorage.getItem("balance-stepi"));
+  localStorage.setItem('currentPage', 'move-containers-unload');		//update current page in local storage
+
+  const saved_stepi = Number(localStorage.getItem("unload-stepi"));
   if(saved_stepi !== stepi && saved_stepi !== null){
     setStep(saved_stepi);
   }
+
+  const currentFile = localStorage.getItem("manifestFileName");
+  const jobType = localStorage.getItem("jobType");
   
   let manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
   let manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
@@ -89,7 +90,7 @@ function Balance(){
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
     if(stepi < steps.length-1){
-      localStorage.setItem("balance-stepi", stepi+1);
+      localStorage.setItem("unload-stepi", stepi+1);
       setStep(stepi+1);
       processStep();
     }else{
@@ -98,10 +99,22 @@ function Balance(){
   };
   
   const finish = async ()=>{
+    // prepare load steps
+    const containers_to_load = localStorage.getItem("containers_to_load");
     uploadManifest(localStorage.getItem("manifestFileName"), localStorage.getItem("manifestFileContent"));
-    navigate("/summary");
-  }
+    if(containers_to_load && containers_to_load.length > 0){
+      const num_containers_to_load = JSON.parse(containers_to_load).length;
+      console.log(manifest_matrix_noextend);
+      console.log(localStorage.getItem("manifestFileContent"));
+      const load_steps = await computeLoad(num_containers_to_load);
+      console.log("load steps",load_steps)
+      localStorage.setItem("load_steps", JSON.stringify(load_steps));
+      navigate("/move-containers-load");
+    }else{
+      navigate("/summary");
+    }
 
+  }
   if(stepi >= steps.length){
     finish();
   }else{
@@ -156,4 +169,4 @@ function Balance(){
   );
 }
 
-export default Balance;
+export default MoveContainersUnload;

@@ -18,13 +18,13 @@ class container{
         //console.log("swapping ", containerToSwapWith)
         const containerClone = containerToSwapWith.clone();
         //console.log("clone", containerClone);
-        containerToSwapWith.row = this.row;
-        containerToSwapWith.col = this.col;
+        //containerToSwapWith.row = this.row;
+        //containerToSwapWith.col = this.col;
         containerToSwapWith.weight = this.weight;
         containerToSwapWith.name = this.name;
 
-        this.row = containerClone.row;
-        this.col = containerClone.col;
+        //this.row = containerClone.row;
+        //this.col = containerClone.col;
         this.weight = containerClone.weight;
         this.name = containerClone.name;
         //console.log("post this ", this);
@@ -66,8 +66,11 @@ function matrix_to_string(manifest_matrix){
     const str = []
     for(let i=0; i<manifest_matrix.length; i++){
         for(let j=0; j<manifest_matrix[0].length; j++){ 
-        const col = `[${manifest_matrix[i][j].row},${manifest_matrix[i][j].col}], {${manifest_matrix[i][j].weight}}, ${manifest_matrix[i][j].name}`
-        str.push(col);
+            while(manifest_matrix[i][j].weight.length !==5){
+                manifest_matrix[i][j].weight = "0" + manifest_matrix[i][j].weight;
+            }
+            const col = `[${manifest_matrix[i][j].row},${manifest_matrix[i][j].col}], {${manifest_matrix[i][j].weight}}, ${manifest_matrix[i][j].name}`
+            str.push(col);
         }
     }
     return str.join("\n");
