@@ -52,7 +52,7 @@ function MoveContainersLoad(){
   let container_pos;
   if(stepi < steps.length){
     container_name_label = containers_to_load[stepi].name;
-    container_pos = `[${steps[stepi].destination[0]},${steps[stepi].destination[1]}]`;
+    container_pos = `[${steps[stepi].destination[0]+1},${steps[stepi].destination[1]+1}]`;
   }
 
   //localStorage.setItem("currentPage", "move-containers-unload");

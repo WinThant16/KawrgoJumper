@@ -56,7 +56,7 @@ function MoveContainersUnload(){
   let src_pos_label;
   if(stepi < steps.length){
     container_label= manifest_matrix[steps[stepi].source[0]][steps[stepi].source[1]].name
-    src_pos_label = `[${steps[stepi].source[0]},${steps[stepi].source[1]}]`;
+    src_pos_label = `[${steps[stepi].source[0]+1},${steps[stepi].source[1]+1}]`;
   }
 
   //localStorage.setItem("currentPage", "move-containers-unload");
@@ -82,7 +82,7 @@ function MoveContainersUnload(){
     if(steps[stepi].destination === "TRUCK"){
       destination_label = "TRUCK";
     }else{
-      destination_label = `[${steps[stepi].destination[0]},${steps[stepi].destination[1]}]`
+      destination_label = `[${steps[stepi].destination[0]+1},${steps[stepi].destination[1]+1}]`
     }
   }
 
