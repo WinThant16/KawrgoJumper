@@ -19,8 +19,12 @@ function Summary() {
             localStorage.setItem("saved_path", saved_path_storage)
             setSavedPath(saved_path_storage);
         });
+          
     }
-
+    const path_printLog = localStorage.getItem("saved_path");
+    if (path_printLog !== null){
+      submitLog (`Operations for selected task are complete. New manifest has been saved to ${path_printLog}`);
+    }
   const reset = () => {
     const user = localStorage.getItem("username");
     localStorage.clear();

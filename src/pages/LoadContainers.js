@@ -75,7 +75,7 @@ function LoadContainers() {
     // console.log("loaded containers", loaded_containers_state_bypass)
     // Log loaded container
     submitLog(
-      `Container loaded: Name - "${currentContainer.name}", Weight - ${currentContainer.weight}kg.`
+      `Container inputted: Name - "${currentContainer.name}", Weight - ${currentContainer.weight}kg.`
     );
 
     setError("");
@@ -105,6 +105,12 @@ function LoadContainers() {
     {
       alert("Cannot continue! You are trying to load more containers than space is available!")
     }else{
+      if (loadedContainers.length === 0){
+        submitLog(`There are zero selected containers to load.`);
+      }
+      else {
+        submitLog(`There are ${loadedContainers.length} total containers to load.`);
+      }
       navigate("/move-containers-unload")
     }
   };
@@ -198,7 +204,7 @@ function LoadContainers() {
         </div>
       </div>
       <button onClick={beginUnloadingBut} className="but-begin-unload">
-        Begin Unloading
+        Begin Unloading/Loading
       </button>
       <strong>If you do not have any containers to load, you may begin without adding containers.</strong>
     </div>

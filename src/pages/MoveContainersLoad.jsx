@@ -71,14 +71,17 @@ function MoveContainersLoad(){
     dest_container.weight = containers_to_load[stepi].weight
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent",matrix_to_string(manifest_matrix_noextend))
+    submitLog(`Load container ${container_name_label} to ${container_pos}.`);
     if(stepi < steps.length-1){
       localStorage.setItem("load-stepi", stepi+1);
       setStep(stepi+1);
       processStep();
     }else{
       uploadManifest(localStorage.getItem("manifestFileName"), localStorage.getItem("manifestFileContent"));
+      submitLog(`All load/unload tasks are done. Proceeding to Summary screen.`);
       navigate("/summary");
     }
+    
   };
   if(stepi < steps.length){
     processStep();
