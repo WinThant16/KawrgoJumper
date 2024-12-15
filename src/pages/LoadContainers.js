@@ -6,6 +6,7 @@ import { submitLog } from "../lib/requestLib";
 
 import { parse_manifest } from "../lib/manifest_parser.js";
 
+
 function getUnusedSlotsAmnt(manifest_matrix){
   let counter = 0;
   for (let i = 0; i < manifest_matrix.length; i++){
@@ -15,6 +16,12 @@ function getUnusedSlotsAmnt(manifest_matrix){
       }
     }
   }
+
+  const selected_containers_str = localStorage.getItem("selected_containers");
+  if(selected_containers_str !== null){
+    counter = counter + JSON.parse(selected_containers_str).length
+  }
+
   return counter;
 }
 
@@ -26,7 +33,7 @@ function LoadContainers() {
   const [loadedContainers, setLoadedContainers] = useState([]);
   const [error, setError] = useState("");
 
-  const slots_remaining = getUnusedSlotsAmnt(parse_manifest(localStorage.getItem("manifestFileContent")));
+  const space_remaining = getUnusedSlotsAmnt(parse_manifest(localStorage.getItem("manifestFileContent")));
 
   const navigate = useNavigate(); // Initialize navigation
 
@@ -93,6 +100,15 @@ function LoadContainers() {
     }
   };
 
+  const beginUnloadingBut = () => {
+    if(loadedContainers.length > space_remaining)
+    {
+      alert("Cannot continue! You are trying to load more containers than space is available!")
+    }else{
+      navigate("/move-containers-unload")
+    }
+  };
+
   return (
     <div className="task-selection-container">
       <Navbar />
@@ -154,7 +170,7 @@ function LoadContainers() {
         <div className="right">
           <div className="info-box">
             <span className="info-label">
-              <strong>Max (Space Remaining): {slots_remaining} </strong>
+              <strong>Max (Space Remaining): {space_remaining} </strong>
             </span>
           </div>
           <h2>Containers To Load: {loadedContainers.length}</h2>
@@ -181,7 +197,7 @@ function LoadContainers() {
           </ul>
         </div>
       </div>
-      <button onClick={() => {}} className="but-begin-unload">
+      <button onClick={beginUnloadingBut} className="but-begin-unload">
         Begin Unloading
       </button>
       <strong>If you do not have any containers to load, you may begin without adding containers.</strong>
