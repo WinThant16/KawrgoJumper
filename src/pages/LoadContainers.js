@@ -176,7 +176,7 @@ function LoadContainers() {
         <div className="right">
           <div className="info-box">
             <span className="info-label">
-              <strong>Max (Space Remaining): {space_remaining} </strong>
+              <strong>Max Load Amount: {space_remaining} </strong>
             </span>
           </div>
           <h2>Containers To Load: {loadedContainers.length}</h2>
