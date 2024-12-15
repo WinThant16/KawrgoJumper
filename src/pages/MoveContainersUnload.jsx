@@ -95,11 +95,13 @@ function MoveContainersUnload(){
       console.log("clear")
       src_container.clear();
       console.log("cleared", src_container);
+      submitLog(`Finished unloading container at ${src_pos_label} (${container_label}) to ${destination_label}.`);
     }else{
       console.log("swap")
       console.log("preswap ", dest_container, src_container)
       dest_container.swap(src_container);
       console.log("swapped ", dest_container, src_container)
+      submitLog(`Finished moving container at ${src_pos_label} (${container_label}) to ${destination_label}.`);
     }
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
@@ -126,6 +128,7 @@ function MoveContainersUnload(){
       localStorage.setItem("load_steps", JSON.stringify(load_steps));
       navigate("/move-containers-load");
     }else{
+      submitLog (`All unload tasks are done. There are no selected load tasks. Proceeding to Summary screen.`);
       navigate("/summary");
     }
 

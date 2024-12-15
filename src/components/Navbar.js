@@ -39,9 +39,11 @@ function Navbar({ onLogFile, onLogout}) {
 			//localStorage.removeItem('manifestFileContent');	//clear manifest contents
 			// We'll have to clear more here as we save more variables
 			//localStorage.removeItem('manifestSettled'); 
+			
 			const user = localStorage.getItem("username");
 			localStorage.clear();
 			localStorage.setItem("username", user);
+			submitLog(`${user} pressed Restart button. Navigating back to upload-manifest page.`);
 			// navigate(0);
 			navigate('/upload-manifest'); //redirect to upload-manifest
 			

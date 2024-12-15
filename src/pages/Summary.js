@@ -18,9 +18,9 @@ function Summary() {
             saved_path_storage = path;
             localStorage.setItem("saved_path", saved_path_storage)
             setSavedPath(saved_path_storage);
+            submitLog (`Operations for selected task are complete. New manifest has been saved to ${path}`);
         });
     }
-
   const reset = () => {
     const user = localStorage.getItem("username");
     localStorage.clear();

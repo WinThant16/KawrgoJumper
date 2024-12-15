@@ -102,6 +102,9 @@ function Balance(){
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
     localStorage.setItem("manifest_extended", matrix_to_string(manifest_matrix));
+    submitLog(`Moved container at ${src_pos_label} (${container_label}) to ${destination_label}.`);
+    
+    
     if(stepi < steps.length-1){
       localStorage.setItem("balance-stepi", stepi+1);
       setStep(stepi+1);
@@ -109,10 +112,12 @@ function Balance(){
     }else{
       finish();
     }
+    
   };
   
   const finish = async ()=>{
     uploadManifest(localStorage.getItem("manifestFileName"), localStorage.getItem("manifestFileContent"));
+    submitLog(`All balance tasks are done. Proceeding to Summary screen.`);
     navigate("/summary");
   }
 
