@@ -57,6 +57,18 @@ function MoveContainersUnload(){
   console.log("steps", steps);
   console.log("outside processstep", stepi)
 
+  const calculateETA = (remainingSteps) => {
+    let totalTime = 0;
+
+    remainingSteps.forEach((step) => {
+      totalTime += step.path.length;
+    });
+
+    return totalTime; 
+  };
+
+  const eta = calculateETA(steps.slice(stepi));
+
   const processStep = () =>{
     // console.log("inside processstep", stepi)
     // console.log("AAA", steps[stepi])
@@ -142,7 +154,7 @@ function MoveContainersUnload(){
           <span className="info-label">
             <strong>ETA:</strong>
           </span>
-          <span className="info-value">{2121}</span>
+          <span className="info-value">{eta} minutes</span>
         </div>
         <button className="begin-button" onClick={nextStep}>
           Next
