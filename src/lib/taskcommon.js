@@ -31,15 +31,15 @@ function shallow_extended_matrix(manifest_matrix, forbidden_rows = []){
     }
     forbidden_rows.push(copy.push([]) - 1); // push returns new length of array
     forbidden_rows.push(copy.push([]) - 1);
-    for(let i = 0; i < manifest_matrix[0].length; i++){
+    for(let i = 1; i <= manifest_matrix[0].length; i++){
         let col;
         if (i < 10){
-            col = ` 0${i}`
+            col = `0${i}`
         }else{
             col = `${i}`;
         }
-        copy[manifest_matrix.length+1].push(new container("09", col, "00000", "UNUSED"));
-        copy[manifest_matrix.length].push(new container("10", col, "00000", "UNUSED"));
+        copy[manifest_matrix.length].push(new container("09", col, "00000", "UNUSED"));
+        copy[manifest_matrix.length+1].push(new container("10", col, "00000", "UNUSED"));
     }
     return copy;
 }
@@ -220,5 +220,18 @@ function deepCopyManifest(manifest_matrix) {
     return copy;
 }
 
+const calculateETA = (remainingSteps) => {
+    let totalTime = 0;
 
-module.exports = {node, step, shallow_extended_matrix, getFirstEmptyRowInCol, validPosition, bfs, findClosestUnusedBFS, displayGraph, containersInTemp, sortContainersLeftHigh, deepCopyManifest}
+    remainingSteps.forEach((step) => {
+      totalTime += step.path.length - 1;
+      if(step.destination === "TRUCK"){ // it will take 2 min to get to the truck, and 2 min to get back
+        totalTime += 4
+      }
+    });
+
+    return totalTime; 
+  };
+
+
+module.exports = {node, step, shallow_extended_matrix, getFirstEmptyRowInCol, validPosition, bfs, findClosestUnusedBFS, displayGraph, containersInTemp, sortContainersLeftHigh, deepCopyManifest, calculateETA}

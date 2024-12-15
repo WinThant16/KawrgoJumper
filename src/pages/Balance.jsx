@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { computeLoad, submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
-import { shallow_extended_matrix } from "../lib/taskcommon";
+import { calculateETA, shallow_extended_matrix } from "../lib/taskcommon";
 
 
 
@@ -24,8 +24,18 @@ function Balance(){
     setStep(saved_stepi);
   }
   
-  let manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
-  let manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  let manifest_matrix_noextend;
+  let manifest_matrix;
+  const manifest_extended = localStorage.getItem("manifest_extended");
+  if(manifest_extended != null){
+    manifest_matrix = parse_manifest(manifest_extended, 10);
+    manifest_matrix_noextend = [...manifest_matrix]
+    console.log("popped", manifest_matrix_noextend.pop())
+    console.log("popped", manifest_matrix_noextend.pop())
+  }else{
+    manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+    manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  }
     
   //setManifestName(localStorage.getItem("manifestFileName"));
   //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
@@ -39,6 +49,9 @@ function Balance(){
   let start_container;// = [steps[0].source];
   let path_containers;// = steps[0].path;
   const steps = JSON.parse(localStorage.getItem("steps")); //{"destination": [1,2], "start": [3,4], "path":[[1,2],[3,4]]} //localStorage.getItem("steps")
+
+
+  const eta = calculateETA(steps.slice(stepi));
 
   let container_label;
   let src_pos_label;
@@ -88,7 +101,10 @@ function Balance(){
     }
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
+    localStorage.setItem("manifest_extended", matrix_to_string(manifest_matrix));
     submitLog(`Moved container at ${src_pos_label} (${container_label}) to ${destination_label}.`);
+    
+    
     if(stepi < steps.length-1){
       localStorage.setItem("balance-stepi", stepi+1);
       setStep(stepi+1);
@@ -132,7 +148,7 @@ function Balance(){
           <span className="info-label">
             <strong>ETA:</strong>
           </span>
-          <span className="info-value">{2121}</span>
+          <span className="info-value">{eta} minutes</span>
         </div>
         <button className="begin-button" onClick={nextStep}>
           Next

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { container, matrix_to_string, parse_manifest } from "../lib/manifest_parser";
-import { shallow_extended_matrix } from "../lib/taskcommon";
+import { calculateETA, shallow_extended_matrix } from "../lib/taskcommon";
 
 function MoveContainersLoad(){
   const [stepi, setStep] = useState(0);
@@ -24,8 +24,18 @@ function MoveContainersLoad(){
   const jobType = localStorage.getItem("jobType");
   const containers_to_load = JSON.parse(localStorage.getItem("containers_to_load"));
 
-  const manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
-  const manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  let manifest_matrix_noextend;
+  let manifest_matrix;
+  const manifest_extended = localStorage.getItem("manifest_extended");
+  if(manifest_extended != null){
+    manifest_matrix = parse_manifest(manifest_extended, 10);
+    manifest_matrix_noextend = [...manifest_matrix]
+    console.log("popped", manifest_matrix_noextend.pop())
+    console.log("popped", manifest_matrix_noextend.pop())
+  }else{
+    manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+    manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  }
     //setManifestName(localStorage.getItem("manifestFileName"));
     //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
   
@@ -35,6 +45,8 @@ function MoveContainersLoad(){
   let start_container;// = [steps[0].source];
   let path_containers;// = steps[0].path;
   const steps = JSON.parse(localStorage.getItem("load_steps")); //{"destination": [1,2], "start": [3,4], "path":[[1,2],[3,4]]} //localStorage.getItem("steps")
+
+  const eta = calculateETA(steps.slice(stepi));
 
   let container_name_label;
   let container_pos;
@@ -70,8 +82,11 @@ function MoveContainersLoad(){
     dest_container.name = containers_to_load[stepi].name
     dest_container.weight = containers_to_load[stepi].weight
     //setManifest(manifest_matrix);
-    localStorage.setItem("manifestFileContent",matrix_to_string(manifest_matrix_noextend))
+
     submitLog(`Load container ${container_name_label} to ${container_pos}.`);
+    localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
+    localStorage.setItem("manifest_extended", matrix_to_string(manifest_matrix));
+
     if(stepi < steps.length-1){
       localStorage.setItem("load-stepi", stepi+1);
       setStep(stepi+1);
@@ -101,13 +116,13 @@ function MoveContainersLoad(){
           <span className="info-label">
             <strong>Job:</strong>
           </span>
-          <span className="info-value">{jobType}</span>
+          <span className="info-value">Load</span>
         </div>
         <div className="info-box">
           <span className="info-label">
             <strong>ETA:</strong>
           </span>
-          <span className="info-value">{2121}</span>
+          <span className="info-value">{eta} minutes</span>
         </div>
         <button className="begin-button" onClick={nextStep}>
           Next

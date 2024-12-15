@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { computeLoad, submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
-import { shallow_extended_matrix } from "../lib/taskcommon";
+import { calculateETA, shallow_extended_matrix } from "../lib/taskcommon";
 
 
 
@@ -25,8 +25,19 @@ function MoveContainersUnload(){
   const currentFile = localStorage.getItem("manifestFileName");
   const jobType = localStorage.getItem("jobType");
   
-  let manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
-  let manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  let manifest_matrix_noextend;
+  let manifest_matrix;
+  const manifest_extended = localStorage.getItem("manifest_extended");
+  if(manifest_extended != null){
+    manifest_matrix = parse_manifest(manifest_extended, 10);
+    manifest_matrix_noextend = [...manifest_matrix]
+    console.log("popped", manifest_matrix_noextend.pop())
+    console.log("popped", manifest_matrix_noextend.pop())
+  }else{
+    manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+    manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  }
+
     
   //setManifestName(localStorage.getItem("manifestFileName"));
   //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
@@ -56,6 +67,9 @@ function MoveContainersUnload(){
   //console.log([steps[0].path[steps[0].path.length-1]])
   console.log("steps", steps);
   console.log("outside processstep", stepi)
+
+
+  const eta = calculateETA(steps.slice(stepi));
 
   const processStep = () =>{
     // console.log("inside processstep", stepi)
@@ -91,6 +105,7 @@ function MoveContainersUnload(){
     }
     //setManifest(manifest_matrix);
     localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
+    localStorage.setItem("manifest_extended", matrix_to_string(manifest_matrix));
     if(stepi < steps.length-1){
       localStorage.setItem("unload-stepi", stepi+1);
       setStep(stepi+1);
@@ -139,13 +154,13 @@ function MoveContainersUnload(){
           <span className="info-label">
             <strong>Job:</strong>
           </span>
-          <span className="info-value">{jobType}</span>
+          <span className="info-value">Unload</span>
         </div>
         <div className="info-box">
           <span className="info-label">
             <strong>ETA:</strong>
           </span>
-          <span className="info-value">{2121}</span>
+          <span className="info-value">{eta} minutes</span>
         </div>
         <button className="begin-button" onClick={nextStep}>
           Next
