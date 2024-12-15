@@ -24,8 +24,18 @@ function MoveContainersLoad(){
   const jobType = localStorage.getItem("jobType");
   const containers_to_load = JSON.parse(localStorage.getItem("containers_to_load"));
 
-  const manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
-  const manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  let manifest_matrix_noextend;
+  let manifest_matrix;
+  const manifest_extended = localStorage.getItem("manifest_extended");
+  if(manifest_extended != null){
+    manifest_matrix = parse_manifest(manifest_extended, 10);
+    manifest_matrix_noextend = [...manifest_matrix]
+    console.log("popped", manifest_matrix_noextend.pop())
+    console.log("popped", manifest_matrix_noextend.pop())
+  }else{
+    manifest_matrix_noextend = parse_manifest(localStorage.getItem("manifestFileContent"));
+    manifest_matrix = shallow_extended_matrix(manifest_matrix_noextend);
+  }
     //setManifestName(localStorage.getItem("manifestFileName"));
     //setManifest(shallow_extended_matrix(parse_manifest(localStorage.getItem("manifestFileContent"), [])));
   
@@ -70,7 +80,8 @@ function MoveContainersLoad(){
     dest_container.name = containers_to_load[stepi].name
     dest_container.weight = containers_to_load[stepi].weight
     //setManifest(manifest_matrix);
-    localStorage.setItem("manifestFileContent",matrix_to_string(manifest_matrix_noextend))
+    localStorage.setItem("manifestFileContent", matrix_to_string(manifest_matrix_noextend));
+    localStorage.setItem("manifest_extended", matrix_to_string(manifest_matrix));
     if(stepi < steps.length-1){
       localStorage.setItem("load-stepi", stepi+1);
       setStep(stepi+1);

@@ -31,15 +31,15 @@ function shallow_extended_matrix(manifest_matrix, forbidden_rows = []){
     }
     forbidden_rows.push(copy.push([]) - 1); // push returns new length of array
     forbidden_rows.push(copy.push([]) - 1);
-    for(let i = 0; i < manifest_matrix[0].length; i++){
+    for(let i = 1; i <= manifest_matrix[0].length; i++){
         let col;
         if (i < 10){
-            col = ` 0${i}`
+            col = `0${i}`
         }else{
             col = `${i}`;
         }
-        copy[manifest_matrix.length+1].push(new container("09", col, "00000", "UNUSED"));
-        copy[manifest_matrix.length].push(new container("10", col, "00000", "UNUSED"));
+        copy[manifest_matrix.length].push(new container("09", col, "00000", "UNUSED"));
+        copy[manifest_matrix.length+1].push(new container("10", col, "00000", "UNUSED"));
     }
     return copy;
 }

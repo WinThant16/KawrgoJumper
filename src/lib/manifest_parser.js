@@ -16,7 +16,9 @@ class container{
     swap(containerToSwapWith){
         //console.log("this ", this);
         //console.log("swapping ", containerToSwapWith)
-        const containerClone = containerToSwapWith.clone();
+        //const containerClone = containerToSwapWith.clone();
+        const temp_name = containerToSwapWith.name;
+        const temp_weight = containerToSwapWith.weight;
         //console.log("clone", containerClone);
         //containerToSwapWith.row = this.row;
         //containerToSwapWith.col = this.col;
@@ -25,8 +27,8 @@ class container{
 
         //this.row = containerClone.row;
         //this.col = containerClone.col;
-        this.weight = containerClone.weight;
-        this.name = containerClone.name;
+        this.weight = temp_weight;
+        this.name = temp_name;
         //console.log("post this ", this);
         //console.log("post swapping ", containerToSwapWith)
         //console.log("post clone", containerClone);
@@ -37,13 +39,13 @@ class container{
     }
 }
 
-function parse_manifest(manifest_text){
+function parse_manifest(manifest_text, rows=8, cols=12){
     // replace carraige returns
     manifest_text = manifest_text.replaceAll("\r", "");
     // split manifest by new lines
     const lines = manifest_text.split("\n");
     // [row,col]
-    const ship_grid = [...Array(8)].map(e => Array(12)); // 8 row , 12 col
+    const ship_grid = [...Array(rows)].map(e => Array(cols)); // 8 row , 12 col
 
     for (let line of lines){
         const groups = line.match(/^\[(\d\d),(\d\d)], {(\d{5})}, (.*)/);
@@ -54,11 +56,12 @@ function parse_manifest(manifest_text){
         const name = groups[4];
         const ship_container = new container(row, col, weight, name)
 
+        console.log("row col", row, col)
+        console.log("row col", Number(row), Number(col))
         ship_grid[Number(row)-1][Number(col)-1] = ship_container;
     }
 
     return ship_grid;
-
 }
 
 // return a manifest matrix back to the original file format
