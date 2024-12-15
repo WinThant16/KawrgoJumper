@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { computeLoad, submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
-import { shallow_extended_matrix } from "../lib/taskcommon";
+import { calculateETA, shallow_extended_matrix } from "../lib/taskcommon";
 
 
 
@@ -68,15 +68,6 @@ function MoveContainersUnload(){
   console.log("steps", steps);
   console.log("outside processstep", stepi)
 
-  const calculateETA = (remainingSteps) => {
-    let totalTime = 0;
-
-    remainingSteps.forEach((step) => {
-      totalTime += step.path.length;
-    });
-
-    return totalTime; 
-  };
 
   const eta = calculateETA(steps.slice(stepi));
 

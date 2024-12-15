@@ -220,5 +220,18 @@ function deepCopyManifest(manifest_matrix) {
     return copy;
 }
 
+const calculateETA = (remainingSteps) => {
+    let totalTime = 0;
 
-module.exports = {node, step, shallow_extended_matrix, getFirstEmptyRowInCol, validPosition, bfs, findClosestUnusedBFS, displayGraph, containersInTemp, sortContainersLeftHigh, deepCopyManifest}
+    remainingSteps.forEach((step) => {
+      totalTime += step.path.length - 1;
+      if(step.destination === "TRUCK"){ // it will take 2 min to get to the truck, and 2 min to get back
+        totalTime += 4
+      }
+    });
+
+    return totalTime; 
+  };
+
+
+module.exports = {node, step, shallow_extended_matrix, getFirstEmptyRowInCol, validPosition, bfs, findClosestUnusedBFS, displayGraph, containersInTemp, sortContainersLeftHigh, deepCopyManifest, calculateETA}

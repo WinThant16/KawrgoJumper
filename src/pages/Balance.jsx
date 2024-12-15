@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { computeLoad, submitLog, uploadManifest } from "../lib/requestLib";
 import "../styles/SelectContainers.css";
 import { matrix_to_string, parse_manifest } from "../lib/manifest_parser";
-import { shallow_extended_matrix } from "../lib/taskcommon";
+import { calculateETA, shallow_extended_matrix } from "../lib/taskcommon";
 
 
 
@@ -50,15 +50,6 @@ function Balance(){
   let path_containers;// = steps[0].path;
   const steps = JSON.parse(localStorage.getItem("steps")); //{"destination": [1,2], "start": [3,4], "path":[[1,2],[3,4]]} //localStorage.getItem("steps")
 
-  const calculateETA = (remainingSteps) => {
-    let totalTime = 0;
-
-    remainingSteps.forEach((step) => {
-      totalTime += step.path.length;
-    });
-
-    return totalTime; 
-  };
 
   const eta = calculateETA(steps.slice(stepi));
 
