@@ -148,7 +148,7 @@ function MoveContainersUnload(){
           <span className="info-label">
             <strong>Job:</strong>
           </span>
-          <span className="info-value">{jobType}</span>
+          <span className="info-value">Unload</span>
         </div>
         <div className="info-box">
           <span className="info-label">
